@@ -1,0 +1,850 @@
+VMEMBER NAME  PROG2
+V000100 IDENTIFICATION DIVISION.                                         00010000
+V000200 PROGRAM-ID. PROG2.                                               00020000
+V000300 ENVIRONMENT DIVISION.                                            00030024
+V000400 INPUT-OUTPUT SECTION.                                            00040002
+V000500 FILE-CONTROL.                                                    00050002
+V000600     SELECT REPORT-FILE ASSIGN TO REPFILE                         00060002
+V000700     ORGANIZATION IS SEQUENTIAL                                   00070002
+V000800     ACCESS MODE  IS SEQUENTIAL.                                  00080050
+V000900 DATA DIVISION.                                                   00090000
+V001000 FILE SECTION.                                                    00100007
+V001100 FD  REPORT-FILE                                                  00110044
+V001200     RECORD CONTAINS 80 CHARACTERS                                00120047
+V001300     RECORDING MODE IS F.                                         00130041
+V001400 01   REPORT-RECORD PIC X(80).                                    00140043
+V001500 WORKING-STORAGE SECTION.                                         00150000
+V001600  01  HEADING-LINE1.                                              00160005
+V001700      03 FILLER     PIC X(02) VALUE 'ID'.                         00170006
+V001800      03 FILLER     PIC X(04) VALUE SPACES.                       00180006
+V001900      03 FILLER     PIC X(08) VALUE 'EMP NAME'.                   00190006
+V002000      03 FILLER     PIC X(08) VALUE SPACES.                       00200006
+V002100      03 FILLER     PIC X(08) VALUE 'LOC NAME'.                   00210006
+V002200      03 FILLER     PIC X(05) VALUE SPACES.                       00220006
+V002300      03 FILLER     PIC X(08) VALUE 'EARNINGS'.                   00230037
+V002400      03 FILLER     PIC X(02) VALUE SPACES.                       00240006
+V002500      03 FILLER     PIC X(10) VALUE 'DEDUCTIONS'.                 00250006
+V002600      03 FILLER     PIC X(01) VALUE SPACES.                       00260006
+V002700      03 FILLER     PIC X(09) VALUE 'TOTAL SAL'.                  00270006
+V002800      03 FILLER     PIC X(15) VALUE SPACES.                       00280045
+V002900  01  DETAIL-LINE.                                                00290005
+V003000      03  P-ID         PIC X(05) VALUE SPACES.                    00300009
+V003100      03  FILLER       PIC X(01) VALUE SPACES.                    00310009
+V003200      03  P-EMP-NAME   PIC X(15) VALUE SPACES.                    00320009
+V003300      03  FILLER       PIC X(01) VALUE SPACES.                    00330009
+V003400      03  P-LOC-NAME   PIC X(12) VALUE SPACES.                    00340009
+V003500      03  FILLER       PIC X(01) VALUE SPACES.                    00350009
+V003600      03  P-EARN       PIC ZZ,ZZ9.99 VALUE ZERO.                  00360009
+V003700      03  FILLER       PIC X(01) VALUE SPACES.                    00370009
+V003800      03  P-DEDN       PIC ZZ,ZZ9.99 VALUE ZERO.                  00380009
+V003900      03  FILLER       PIC X(01) VALUE SPACES.                    00390009
+V004000      03  P-SAL        PIC ZZ,ZZ9.99 VALUE ZERO.                  00400009
+V004100      03  FILLER       PIC X(22)  VALUE SPACES.                   00410046
+V004200 01  WS-VARIABLES.                                                00420011
+V004300     03  WS-EMP-ID     PIC X(05) VALUE SPACES.                    00430012
+V004400         88 END-OF-DATA          VALUE 'XXXXX'.                   00440049
+V004500 01  WS-SAL        PIC 9(05)V99 VALUE ZERO.                       00450034
+V004600 01  WS-SQLCODE    PIC -9(03) VALUE ZERO.                         00460034
+V004700 01  WS-EARN-IND   PIC S9(4) COMP VALUE ZERO.                     00470059
+V004800 01  WS-DEDN-IND   PIC S9(4) COMP VALUE ZERO.                     00480059
+V004900     EXEC SQL                                                     00490000
+V005000        INCLUDE EMPLOYEE                                          00500000
+V005100     END-EXEC.                                                    00510000
+V005200     EXEC SQL                                                     00520001
+V005300        INCLUDE LOCATION                                          00530001
+V005400     END-EXEC.                                                    00540001
+V005500     EXEC SQL                                                     00550000
+V005600        INCLUDE SQLCA                                             00560000
+V005700     END-EXEC.                                                    00570000
+V005800 PROCEDURE DIVISION.                                              00580000
+V005900 MAIN-PARA.                                                       00590000
+V006000     PERFORM 0000-MAIN-PARA                                       00600049
+V006100     PERFORM 1000-INIT-PARA UNTIL END-OF-DATA                     00610049
+V006200     PERFORM 9000-END-PARA                                        00620051
+V006300     STOP RUN.                                                    00630051
+V006400 0000-MAIN-PARA.                                                  00640049
+V006500     OPEN OUTPUT REPORT-FILE                                      00650017
+V006600     WRITE REPORT-RECORD FROM HEADING-LINE1                       00660056
+V006700     ACCEPT WS-EMP-ID.                                            00670049
+V006800 1000-INIT-PARA.                                                  00680049
+V006900     EXEC SQL                                                     00690012
+V007000        SELECT E.EMP_ID,                                          00700030
+V007100               E.EMP_NAME,                                        00710030
+V007200               L.LOC_NAME,                                        00720030
+V007300               E.EMP_EARN,                                        00730030
+V007400               E.EMP_DEDN                                         00740030
+V007500        INTO   :HV-EMP-ID,                                        00750030
+V007600               :HV-EMP-NAME,                                      00760030
+V007700               :HV-LOC-NAME,                                      00770030
+V007800               :HV-EMP-EARN:WS-EARN-IND,                          00780059
+V007900               :HV-EMP-DEDN:WS-DEDN-IND                           00790059
+V008000        FROM T11_EMPLOYEE_TABLE E                                 00800027
+V008100            ,T11_LOCATION_TABLE L                                 00810030
+V008200        WHERE E.EMP_LOC = L.LOC_ID                                00820024
+V008300         AND  E.EMP_ID = :WS-EMP-ID                               00830058
+V008400     END-EXEC.                                                    00840059
+V008500     MOVE SQLCODE TO WS-SQLCODE                                   00850034
+V008600     DISPLAY 'SELECT SQL = ', WS-SQLCODE                          00860034
+V008700     EVALUATE SQLCODE                                             00870000
+V008800        WHEN ZERO                                                 00880000
+V008900           PERFORM 3000-INDICATE-PARA                             00890059
+V009000           PERFORM 2000-PROCESS-PARA                              00900024
+V009100        WHEN 100                                                  00910000
+V009200           DISPLAY 'INVALID EMP ID ', WS-EMP-ID                   00920000
+V009300        WHEN OTHER                                                00930000
+V009400           DISPLAY 'ERROR READING EMPLOYEE TABLE ', WS-EMP-ID     00940058
+V009500     END-EVALUATE                                                 00950052
+V009600     PERFORM 5000-WRITE-PARA                                      00960054
+V009700     ACCEPT WS-EMP-ID.                                            00970049
+V009800  3000-INDICATE-PARA.                                             00980059
+V009900     IF WS-EARN-IND < ZERO                                        00990059
+V010000       MOVE ZERO TO P-EARN.                                       01000059
+V010100     IF WS-DEDN-IND < ZERO                                        01010059
+V010200       MOVE ZERO TO P-DEDN.                                       01020059
+V010300  2000-PROCESS-PARA.                                              01030022
+V010400     MOVE HV-EMP-ID          TO P-ID                              01040059
+V010500     MOVE HV-EMP-NAME-TEXT(1:HV-EMP-NAME-LEN)                     01050060
+V010600                     TO P-EMP-NAME                                01060060
+V010700     MOVE HV-LOC-NAME-TEXT(1:HV-LOC-NAME-LEN)                     01070060
+V010800                     TO P-LOC-NAME                                01080060
+V010900     MOVE HV-EMP-EARN        TO P-EARN                            01090059
+V011000     MOVE HV-EMP-DEDN        TO P-DEDN                            01100059
+V011100     COMPUTE WS-SAL = HV-EMP-EARN - HV-EMP-DEDN                   01110018
+V011200     MOVE WS-SAL       TO P-SAL.                                  01120054
+V011300  5000-WRITE-PARA.                                                01130022
+V011400     WRITE REPORT-RECORD FROM DETAIL-LINE.                        01140019
+V011500  9000-END-PARA.                                                  01150022
+V011600       CLOSE REPORT-FILE.                                         01160020
+VMEMBER NAME  PROG3
+V000100 IDENTIFICATION DIVISION.                                         00010000
+V000200 PROGRAM-ID. PROG3.                                               00020000
+V000300 DATA DIVISION.                                                   00030000
+V000400 WORKING-STORAGE SECTION.                                         00040000
+V000500 01  WS-LOC        PIC X(03)  VALUE SPACES.                       00050004
+V000600     88 END-OF-DATA           VALUE 'XXX'.                        00060006
+V000700 01  WS-ID         PIC X(05)  VALUE SPACES.                       00070004
+V000800 01  WS-NAME       PIC X(15)  VALUE SPACES.                       00080004
+V000900 01  WS-TECH       PIC X(05)  VALUE SPACES.                       00090004
+V001000 01  WS-EARN       PIC 9(05)V99 VALUE ZERO.                       00100004
+V001100 01  WS-DEDN       PIC 9(05)V99 VALUE ZERO.                       00110004
+V001200 01  WS-SQLCODE    PIC -9(03) VALUE ZERO.                         00120001
+V001300     EXEC SQL                                                     00130000
+V001400        INCLUDE EMPLOYEE                                          00140000
+V001500     END-EXEC.                                                    00150008
+V001600     EXEC SQL                                                     00160000
+V001700        INCLUDE SQLCA                                             00170000
+V001800     END-EXEC.                                                    00180008
+V001900     EXEC SQL                                                     00190000
+V002000        DECLARE EMP_CUR CURSOR FOR                                00200000
+V002100        SELECT EMP_ID, EMP_NAME, EMP_EARN, EMP_TECH, EMP_DEDN     00210008
+V002200        FROM    T11_EMPLOYEE_TABLE                                00220000
+V002300        WHERE EMP_LOC = :WS-LOC                                   00230000
+V002400     END-EXEC.                                                    00240000
+V002500 PROCEDURE DIVISION.                                              00250000
+V002600 MAIN-PARA.                                                       00260000
+V002700     ACCEPT WS-LOC.                                               00270000
+V002800     EXEC SQL                                                     00280000
+V002900         OPEN EMP_CUR                                             00290000
+V003000     END-EXEC                                                     00300000
+V003100     EXEC SQL                                                     00310000
+V003200        FETCH EMP_CUR INTO                                        00320000
+V003300        :HV-EMP-ID, :HV-EMP-NAME, :HV-EMP-EARN,                   00330003
+V003400                :HV-EMP-TECH, :HV-EMP-DEDN                        00340003
+V003500     END-EXEC                                                     00350000
+V003600     DISPLAY 'SELECT SQL = ', SQLCODE                             00360000
+V003700     EVALUATE SQLCODE                                             00370000
+V003800        WHEN ZERO                                                 00380000
+V003900           PERFORM MOVE-PARA                                      00390000
+V004000           DISPLAY 'ID = ', WS-ID                                 00400004
+V004100           DISPLAY 'NAME = ', WS-NAME                             00410004
+V004200           DISPLAY 'TECH = ', WS-TECH                             00420004
+V004300           DISPLAY 'EARN = ', WS-EARN                             00430004
+V004400           DISPLAY 'DEDN = ', WS-DEDN                             00440004
+V004500        WHEN 100                                                  00450004
+V004600           DISPLAY 'NO MORE ROWS TO FETCH', WS-LOC                00460004
+V004700        WHEN OTHER                                                00470004
+V004800           DISPLAY 'ERROR READING EMPLOYEE TABLE'                 00480004
+V004900     END-EVALUATE                                                 00490004
+V005000     EXEC SQL                                                     00500004
+V005100         CLOSE EMP_CUR                                            00510004
+V005200     END-EXEC                                                     00520004
+V005300     STOP RUN.                                                    00530007
+V005400  MOVE-PARA.                                                      00540004
+V005500     MOVE HV-EMP-ID   TO WS-ID                                    00550004
+V005600     MOVE HV-EMP-NAME TO WS-NAME                                  00560005
+V005700     MOVE HV-EMP-TECH TO WS-TECH                                  00570008
+V005800     MOVE HV-EMP-EARN TO WS-EARN                                  00580004
+V005900     MOVE HV-EMP-DEDN TO WS-DEDN.                                 00590004
+VMEMBER NAME  PROG4
+V000100 IDENTIFICATION DIVISION.                                         00010000
+V000200 PROGRAM-ID. PROG4.                                               00020000
+V000300 ENVIRONMENT DIVISION.                                            00030000
+V000400 INPUT-OUTPUT SECTION.                                            00040000
+V000500 FILE-CONTROL.                                                    00050000
+V000600     SELECT REPORT-FILE ASSIGN TO REPFILE                         00060000
+V000700     ORGANIZATION IS SEQUENTIAL                                   00070000
+V000800     ACCESS MODE  IS SEQUENTIAL.                                  00080000
+V000900 DATA DIVISION.                                                   00090000
+V001000 FILE SECTION.                                                    00100000
+V001100 FD  REPORT-FILE                                                  00110000
+V001200     RECORD CONTAINS 80 CHARACTERS                                00120000
+V001300     RECORDING MODE IS F.                                         00130000
+V001400 01   REPORT-RECORD PIC X(80).                                    00140000
+V001500 WORKING-STORAGE SECTION.                                         00150000
+V001600  01  HEADING-LINE1.                                              00160000
+V001700      03 FILLER     PIC X(02) VALUE 'ID'.                         00170000
+V001800      03 FILLER     PIC X(04) VALUE SPACES.                       00180000
+V001900      03 FILLER     PIC X(08) VALUE 'EMP NAME'.                   00190000
+V002000      03 FILLER     PIC X(08) VALUE SPACES.                       00200000
+V002100      03 FILLER     PIC X(04) VALUE 'TECH'.                       00210000
+V002200      03 FILLER     PIC X(09) VALUE SPACES.                       00220000
+V002300      03 FILLER     PIC X(08) VALUE 'EARNINGS'.                   00230000
+V002400      03 FILLER     PIC X(02) VALUE SPACES.                       00240000
+V002500      03 FILLER     PIC X(10) VALUE 'DEDUCTIONS'.                 00250000
+V002600      03 FILLER     PIC X(01) VALUE SPACES.                       00260000
+V002700      03 FILLER     PIC X(09) VALUE 'TOTAL SAL'.                  00270000
+V002800      03 FILLER     PIC X(15) VALUE SPACES.                       00280000
+V002900  01  DETAIL-LINE.                                                00290000
+V003000      03  P-ID         PIC X(05) VALUE SPACES.                    00300000
+V003100      03  FILLER       PIC X(01) VALUE SPACES.                    00310000
+V003200      03  P-EMP-NAME   PIC X(15) VALUE SPACES.                    00320000
+V003300      03  FILLER       PIC X(01) VALUE SPACES.                    00330000
+V003400      03  P-TECH       PIC X(05) VALUE SPACES.                    00340000
+V003500      03  FILLER       PIC X(08) VALUE SPACES.                    00350000
+V003600      03  P-EARN       PIC ZZ,ZZ9.99 VALUE ZERO.                  00360000
+V003700      03  FILLER       PIC X(01) VALUE SPACES.                    00370000
+V003800      03  P-DEDN       PIC ZZ,ZZ9.99 VALUE ZERO.                  00380000
+V003900      03  FILLER       PIC X(01) VALUE SPACES.                    00390000
+V004000      03  P-SAL        PIC ZZ,ZZ9.99 VALUE ZERO.                  00400000
+V004100      03  FILLER       PIC X(22)  VALUE SPACES.                   00410000
+V004200 01  WS-VARIABLES.                                                00420000
+V004300     03  WS-LOC    PIC X(03) VALUE SPACES.                        00430000
+V004400         88 END-OF-DATA          VALUE 'XXX'.                     00440000
+V004500 01  WS-SAL        PIC 9(05)V99 VALUE ZERO.                       00450000
+V004600 01  WS-SQLCODE    PIC -9(03) VALUE ZERO.                         00460000
+V004700     EXEC SQL                                                     00470000
+V004800        INCLUDE EMPLOYEE                                          00480000
+V004900     END-EXEC.                                                    00490000
+V005000     EXEC SQL                                                     00500000
+V005100        INCLUDE SQLCA                                             00510000
+V005200     END-EXEC.                                                    00520000
+V005300     EXEC SQL                                                     00530002
+V005400        DECLARE EMP_CUR CURSOR FOR                                00540002
+V005500        SELECT EMP_ID, EMP_NAME, EMP_EARN,                        00550011
+V005600                        EMP_TECH, EMP_DEDN                        00560011
+V005700        FROM    T11_EMPLOYEE_TABLE                                00570002
+V005800        WHERE EMP_LOC = :WS-LOC                                   00580002
+V005900     END-EXEC.                                                    00590002
+V006000 PROCEDURE DIVISION.                                              00600000
+V006100 MAIN-PARA.                                                       00610000
+V006200     PERFORM 0000-MAIN-PARA                                       00620000
+V006300     PERFORM 1000-INIT-PARA UNTIL END-OF-DATA                     00630000
+V006400     PERFORM CLOSE-CURSOR                                         00640006
+V006500     PERFORM 9000-END-PARA                                        00650000
+V006600     STOP RUN.                                                    00660000
+V006700 0000-MAIN-PARA.                                                  00670000
+V006800     OPEN OUTPUT REPORT-FILE                                      00680000
+V006900     WRITE REPORT-RECORD FROM HEADING-LINE1                       00690000
+V007000     ACCEPT WS-LOC                                                00700009
+V007100     PERFORM OPEN-CURSOR.                                         00710009
+V007200 OPEN-CURSOR.                                                     00720005
+V007300     EXEC SQL                                                     00730005
+V007400        OPEN EMP_CUR                                              00740005
+V007500     END-EXEC.                                                    00750005
+V007600 CLOSE-CURSOR.                                                    00760005
+V007700     EXEC SQL                                                     00770005
+V007800        CLOSE EMP_CUR                                             00780005
+V007900     END-EXEC.                                                    00790005
+V008000 1000-INIT-PARA.                                                  00800000
+V008100     EXEC SQL                                                     00810000
+V008200        FETCH EMP_CUR INTO                                        00820002
+V008300        :HV-EMP-ID, :HV-EMP-NAME, :HV-EMP-EARN                    00830010
+V008400               , :HV-EMP-TECH, :HV-EMP-DEDN                       00840010
+V008500     END-EXEC.                                                    00850000
+V008600     MOVE SQLCODE TO WS-SQLCODE                                   00860000
+V008700     DISPLAY 'SELECT SQL = ', WS-SQLCODE                          00870000
+V008800     EVALUATE SQLCODE                                             00880000
+V008900        WHEN ZERO                                                 00890000
+V009000           PERFORM 2000-PROCESS-PARA                              00900000
+V009100        WHEN 100                                                  00910000
+V009200           DISPLAY 'NO MORE ROWS TO FETCH', WS-LOC                00920002
+V009300        WHEN OTHER                                                00930000
+V009400           DISPLAY 'ERROR READING EMPLOYEE TABLE ', WS-LOC        00940002
+V009500     END-EVALUATE                                                 00950000
+V009600     PERFORM 5000-WRITE-PARA.                                     00960007
+V009700     ACCEPT WS-LOC.                                               00970008
+V009800  2000-PROCESS-PARA.                                              00980000
+V009900     MOVE HV-EMP-ID          TO P-ID                              00990000
+V010000     MOVE HV-EMP-NAME-TEXT(1:HV-EMP-NAME-LEN)                     01000000
+V010100                     TO P-EMP-NAME                                01010000
+V010200     MOVE HV-EMP-TECH        TO P-TECH                            01020004
+V010300     MOVE HV-EMP-EARN        TO P-EARN                            01030000
+V010400     MOVE HV-EMP-DEDN        TO P-DEDN                            01040000
+V010500     COMPUTE WS-SAL = HV-EMP-EARN - HV-EMP-DEDN                   01050000
+V010600     MOVE WS-SAL       TO P-SAL.                                  01060000
+V010700  5000-WRITE-PARA.                                                01070000
+V010800     WRITE REPORT-RECORD FROM DETAIL-LINE.                        01080000
+V010900  9000-END-PARA.                                                  01090000
+V011000       CLOSE REPORT-FILE.                                         01100000
+VMEMBER NAME  PROG5
+V000100 IDENTIFICATION DIVISION.                                         00010000
+V000200 PROGRAM-ID. PROG5.                                               00020000
+V000300 ENVIRONMENT DIVISION.                                            00030000
+V000400 INPUT-OUTPUT SECTION.                                            00040000
+V000500 FILE-CONTROL.                                                    00050000
+V000600     SELECT REPORT-FILE ASSIGN TO REPFILE                         00060000
+V000700     ORGANIZATION IS SEQUENTIAL                                   00070000
+V000800     ACCESS MODE  IS SEQUENTIAL.                                  00080000
+V000900 DATA DIVISION.                                                   00090000
+V001000 FILE SECTION.                                                    00100000
+V001100 FD  REPORT-FILE                                                  00110000
+V001200     RECORD CONTAINS 80 CHARACTERS                                00120000
+V001300     RECORDING MODE IS F.                                         00130000
+V001400 01   REPORT-RECORD PIC X(80).                                    00140000
+V001500 WORKING-STORAGE SECTION.                                         00150000
+V001600  01  HEADING-LINE1.                                              00160000
+V001700      03 FILLER     PIC X(02) VALUE 'ID'.                         00170000
+V001800      03 FILLER     PIC X(04) VALUE SPACES.                       00180000
+V001900      03 FILLER     PIC X(08) VALUE 'EMP NAME'.                   00190000
+V002000      03 FILLER     PIC X(08) VALUE SPACES.                       00200000
+V002100      03 FILLER     PIC X(04) VALUE 'TECH'.                       00210000
+V002200      03 FILLER     PIC X(09) VALUE SPACES.                       00220000
+V002300      03 FILLER     PIC X(08) VALUE 'EARNINGS'.                   00230000
+V002400      03 FILLER     PIC X(02) VALUE SPACES.                       00240000
+V002500      03 FILLER     PIC X(10) VALUE 'DEDUCTIONS'.                 00250000
+V002600      03 FILLER     PIC X(01) VALUE SPACES.                       00260000
+V002700*     03 FILLER     PIC X(09) VALUE 'TOTAL SAL'.                  00270008
+V002800*     03 FILLER     PIC X(15) VALUE SPACES.                       00280008
+V002900  01  DETAIL-LINE.                                                00290000
+V003000      03  P-ID         PIC X(05) VALUE SPACES.                    00300000
+V003100      03  FILLER       PIC X(01) VALUE SPACES.                    00310000
+V003200      03  P-EMP-NAME   PIC X(15) VALUE SPACES.                    00320000
+V003300      03  FILLER       PIC X(01) VALUE SPACES.                    00330000
+V003400      03  P-TECH       PIC X(05) VALUE SPACES.                    00340000
+V003500      03  FILLER       PIC X(08) VALUE SPACES.                    00350000
+V003600      03  P-EARN       PIC ZZ,ZZ9.99 VALUE ZERO.                  00360000
+V003700      03  FILLER       PIC X(01) VALUE SPACES.                    00370000
+V003800      03  P-DEDN       PIC ZZ,ZZ9.99 VALUE ZERO.                  00380000
+V003900      03  FILLER       PIC X(01) VALUE SPACES.                    00390000
+V004000*     03  P-SAL        PIC ZZ,ZZ9.99 VALUE ZERO.                  00400008
+V004100*     03  FILLER       PIC X(22)  VALUE SPACES.                   00410008
+V004200 01  WS-VARIABLES.                                                00420000
+V004300     03  WS-LOC    PIC X(03) VALUE SPACES.                        00430000
+V004400         88 END-OF-DATA          VALUE 'XXX'.                     00440000
+V004500*01  WS-SAL        PIC 9(05)V99 VALUE ZERO.                       00450008
+V004600 01  WS-SQLCODE    PIC -9(03) VALUE ZERO.                         00460000
+V004700 01  WS-EMP-EARN   PIC S9(5)V99 VALUE ZERO.                       00470008
+V004800     EXEC SQL                                                     00480000
+V004900        INCLUDE EMPLOYEE                                          00490000
+V005000     END-EXEC.                                                    00500000
+V005100     EXEC SQL                                                     00510000
+V005200        INCLUDE SQLCA                                             00520000
+V005300     END-EXEC.                                                    00530000
+V005400     EXEC SQL                                                     00540000
+V005500        DECLARE EMP_CUR CURSOR FOR                                00550000
+V005600        SELECT EMP_ID, EMP_NAME, EMP_EARN,                        00560000
+V005700                        EMP_TECH, EMP_DEDN                        00570000
+V005800        FROM    T11_EMPLOYEE_TABLE                                00580000
+V005900        WHERE EMP_LOC = :WS-LOC                                   00590000
+V006000        AND   EMP_TECH IN('TEST', 'JAVA')                         00600016
+V006100        FOR UPDATE OF EMP_EARN                                    00610000
+V006200     END-EXEC.                                                    00620000
+V006300 PROCEDURE DIVISION.                                              00630000
+V006400 MAIN-PARA.                                                       00640000
+V006500     OPEN OUTPUT REPORT-FILE                                      00650015
+V006600     WRITE REPORT-RECORD FROM HEADING-LINE1                       00660015
+V006700     ACCEPT WS-LOC                                                00670015
+V006800     PERFORM OPEN-CURSOR                                          00680015
+V006900     PERFORM 1000-PROCESS-PARA UNTIL SQLCODE = 100                00690015
+V007000     PERFORM CLOSE-CURSOR                                         00700000
+V007100     CLOSE REPORT-FILE                                            00710015
+V007200     STOP RUN.                                                    00720000
+V007300 OPEN-CURSOR.                                                     00730000
+V007400     EXEC SQL                                                     00740000
+V007500        OPEN EMP_CUR                                              00750000
+V007600     END-EXEC.                                                    00760000
+V007700 CLOSE-CURSOR.                                                    00770000
+V007800     EXEC SQL                                                     00780000
+V007900        CLOSE EMP_CUR                                             00790000
+V008000     END-EXEC.                                                    00800000
+V008100 1000-PROCESS-PARA.                                               00810015
+V008200     EXEC SQL                                                     00820000
+V008300        FETCH EMP_CUR INTO                                        00830000
+V008400        :HV-EMP-ID, :HV-EMP-NAME, :HV-EMP-EARN                    00840017
+V008500               , :HV-EMP-TECH, :HV-EMP-DEDN                       00850000
+V008600     END-EXEC                                                     00860015
+V008700     DISPLAY 'SELECT SQL = ', SQLCODE                             00870015
+V008800       EVALUATE SQLCODE                                           00880013
+V008900         WHEN ZERO                                                00890013
+V009000            DISPLAY 'FETCHED SUCCESSFULLY', WS-LOC                00900015
+V009100            IF HV-EMP-TECH = 'TEST'                               00910015
+V009200               MOVE HV-EMP-EARN TO WS-EMP-EARN                    00920017
+V009300               COMPUTE WS-EMP-EARN = WS-EMP-EARN + 3000           00930015
+V009400               MOVE WS-EMP-EARN TO HV-EMP-EARN                    00940015
+V009500            ELSE                                                  00950015
+V009600               MOVE HV-EMP-EARN TO WS-EMP-EARN                    00960017
+V009700               COMPUTE WS-EMP-EARN = WS-EMP-EARN + 6000           00970015
+V009800               MOVE WS-EMP-EARN TO HV-EMP-EARN                    00980015
+V009900            END-IF                                                00990015
+V010000           PERFORM 2000-MOVE-PARA                                 01000015
+V010100           WRITE REPORT-RECORD FROM DETAIL-LINE                   01010015
+V010200           PERFORM UPDATE-PARA                                    01020017
+V010300         WHEN 100                                                 01030015
+V010400            DISPLAY 'FETCH UNSUCCESSFUL', WS-LOC                  01040015
+V010500            PERFORM CLOSE-CURSOR                                  01050015
+V010600            STOP RUN                                              01060015
+V010700       END-EVALUATE.                                              01070015
+V010800  2000-MOVE-PARA.                                                 01080015
+V010900     MOVE HV-EMP-ID          TO P-ID                              01090000
+V011000     MOVE HV-EMP-NAME        TO P-EMP-NAME                        01100008
+V011100     MOVE HV-EMP-TECH        TO P-TECH                            01110000
+V011200     MOVE HV-EMP-EARN        TO P-EARN                            01120000
+V011300     MOVE HV-EMP-DEDN        TO P-DEDN.                           01130008
+V011400*    COMPUTE WS-SAL = HV-EMP-EARN - HV-EMP-DEDN                   01140008
+V011500*    MOVE WS-SAL       TO P-SAL.                                  01150008
+V011600  UPDATE-PARA.                                                    01160010
+V011700     EXEC SQL                                                     01170010
+V011800         UPDATE  T11_EMPLOYEE_TABLE                               01180010
+V011900         SET     EMP_EARN = :HV-EMP-EARN                          01190010
+V012000         WHERE CURRENT OF EMP_CUR                                 01200010
+V012100     END-EXEC.                                                    01210010
+VMEMBER NAME  PROG06
+V000100 IDENTIFICATION DIVISION.                                         00010000
+V000200 PROGRAM-ID. PROG06.                                              00020000
+V000300 ENVIRONMENT DIVISION.                                            00030000
+V000400 INPUT-OUTPUT SECTION.                                            00040000
+V000500                                                                  00050000
+V000600 FILE-CONTROL.                                                    00060000
+V000700     SELECT REPORT-FILE ASSIGN TO REPFILE                         00070000
+V000800     ACCESS MODE IS SEQUENTIAL                                    00080000
+V000900     ORGANIZATION IS SEQUENTIAL.                                  00090000
+V001000                                                                  00100000
+V001100 DATA DIVISION.                                                   00110000
+V001200 FILE SECTION.                                                    00120000
+V001300 FD  REPORT-FILE                                                  00130000
+V001400     RECORD CONTAINS 80 CHARACTERS                                00140000
+V001500     RECORDING MODE IS F.                                         00150000
+V001600 01  REPORT-RECORD PIC X(80).                                     00160000
+V001700                                                                  00170000
+V001800 WORKING-STORAGE SECTION.                                         00180000
+V001900 01  WS-INPUT      PIC X(11)      VALUE SPACES.                   00190001
+V002000 01  WS-EMP-LOC    PIC X(03)      VALUE SPACES.                   00200000
+V002100 01  WS-PER        PIC 9(02)      VALUE ZERO.                     00210000
+V002200 01  WS-SAL        PIC 9(07)V99.                                  00220000
+V002300 01  WS-EMP-SAL    PIC ZZZ,ZZ9.99 VALUE ZERO.                     00230000
+V002400 01  WS-EARN       PIC 9(05)V99.                                  00240000
+V002500 01  WS-DEDN       PIC 9(05)V99.                                  00250000
+V002600 01  WS-TABLE-FLAG PIC X(01)      VALUE 'N'.                      00260000
+V002700 01  WS-CHECK      PIC X(03)      VALUE 'XXX'.                    00270000
+V002800 01  ERROR-MESSAGE.                                               00280006
+V002900     03 ERROR-MESSAGE-LENGTH  PIC S9(04) COMP VALUE +800.         00290006
+V003000     03 ERROR-MESSAGE-LINE    PIC X(80)  OCCURS 10 TIMES          00300006
+V003100                          INDEXED BY EML-INDEX.                   00310006
+V003200     03 ERROR-LINE-LENGTH     PIC S9(9) COMP VALUE +80.           00320006
+V003300                                                                  00330000
+V003400     EXEC SQL                                                     00340000
+V003500         INCLUDE EMPLOYEE                                         00350000
+V003600     END-EXEC.                                                    00360000
+V003700     EXEC SQL                                                     00370000
+V003800         INCLUDE LOCATION                                         00380000
+V003900     END-EXEC.                                                    00390000
+V004000     EXEC SQL                                                     00400000
+V004100         INCLUDE SQLCA                                            00410000
+V004200     END-EXEC.                                                    00420000
+V004300                                                                  00430000
+V004400 01  HEADING-LINE.                                                00440000
+V004500     03  FILLER PIC X(06)      VALUE 'ID'.                        00450000
+V004600     03  FILLER PIC X(16)      VALUE 'NAME'.                      00460000
+V004700     03  FILLER PIC X(05)      VALUE 'DESG'.                      00470002
+V004800     03  FILLER PIC X(11)      VALUE 'EARNINGS '.                 00480000
+V004900     03  FILLER PIC X(11)      VALUE ' DEDUCTIONS'.               00490000
+V005000     03  FILLER PIC X(11)      VALUE '  SALARY'.                  00500000
+V005100                                                                  00510000
+V005200 01  DETAIL-LINE.                                                 00520000
+V005300     03  P-ID   PIC X(05)      VALUE SPACES.                      00530000
+V005400     03  FILLER PIC X(01)      VALUE SPACES.                      00540000
+V005500     03  P-NAME PIC X(15)      VALUE SPACES.                      00550000
+V005600     03  FILLER PIC X(01)      VALUE SPACES.                      00560000
+V005700     03  P-DESG PIC 9(01)      VALUE ZERO.                        00570002
+V005800     03  FILLER PIC X(05)      VALUE SPACES.                      00580006
+V005900     03  P-EARN PIC ZZ,ZZ9.99  VALUE ZERO.                        00590001
+V006000     03  FILLER PIC X(01)      VALUE SPACES.                      00600000
+V006100     03  P-DEDN PIC ZZ,ZZ9.99  VALUE ZERO.                        00610001
+V006200     03  FILLER PIC X(01)      VALUE SPACES.                      00620000
+V006300     03  P-SAL  PIC ZZ,ZZ9.99  VALUE ZERO.                        00630001
+V006400                                                                  00640000
+V006500 01  DETAIL-LINE1.                                                00650001
+V006600     03  FILLER PIC X(80)      VALUE ALL '-'.                     00660000
+V006700                                                                  00670000
+V006800*   01  DETAIL-LINE1.                                             00680007
+V006900*       03  FILLER PIC X(16)      VALUE ALL 'UPDATE FAILED!!!'.   00690007
+V007000                                                                  00700000
+V007100     EXEC SQL                                                     00710000
+V007200         DECLARE EMP_CUR CURSOR FOR                               00720000
+V007300         SELECT EMP_ID, EMP_NAME, EMP_LOC,                        00730000
+V007400                           EMP_DESG, EMP_EARN, EMP_DEDN           00740000
+V007500         FROM T11_EMPLOYEE_TABLE                                  00750002
+V007600         WHERE EMP_LOC = :WS-EMP-LOC AND                          00760000
+V007700               EMP_DESG IN (1, 2, 3, 4)                           00770003
+V007800         FOR UPDATE OF EMP_EARN, EMP_DEDN                         00780000
+V007900     END-EXEC.                                                    00790000
+V008000                                                                  00800000
+V008100 PROCEDURE DIVISION.                                              00810000
+V008200 MAIN-PARA.                                                       00820000
+V008300     PERFORM INIT-PARA                                            00830000
+V008400     PERFORM OPEN-CURSOR                                          00840000
+V008500     PERFORM SQL-PARA UNTIL WS-TABLE-FLAG = 'Y'                   00850000
+V008600     PERFORM CLOSE-CURSOR                                         00860000
+V008700     PERFORM END-PARA.                                            00870000
+V008800                                                                  00880000
+V008900 INIT-PARA.                                                       00890000
+V009000     OPEN OUTPUT REPORT-FILE.                                     00900002
+V009100     WRITE REPORT-RECORD FROM HEADING-LINE                        00910005
+V009200     WRITE REPORT-RECORD FROM DETAIL-LINE.                        00920007
+V009300                                                                  00930000
+V009400 OPEN-CURSOR.                                                     00940000
+V009500     ACCEPT WS-INPUT                                              00950000
+V009600     MOVE WS-INPUT(1:3) TO WS-EMP-LOC                             00960000
+V009700     EXEC SQL                                                     00970000
+V009800         OPEN EMP_CUR                                             00980000
+V009900     END-EXEC.                                                    00990000
+V010000                                                                  01000000
+V010100 CLOSE-CURSOR.                                                    01010000
+V010200     EXEC SQL                                                     01020000
+V010300         CLOSE EMP_CUR                                            01030000
+V010400     END-EXEC.                                                    01040000
+V010500                                                                  01050000
+V010600 SQL-PARA.                                                        01060000
+V010700     EXEC SQL                                                     01070000
+V010800         FETCH EMP_CUR                                            01080000
+V010900         INTO  :HV-EMP-ID, :HV-EMP-NAME, :HV-EMP-LOC,             01090007
+V011000         :HV-EMP-DESG,:HV-EMP-EARN, :HV-EMP-DEDN                  01100004
+V011100     END-EXEC                                                     01110000
+V011200     DISPLAY 'FETCH  SQL = ', SQLCODE                             01120007
+V011300     EVALUATE SQLCODE                                             01130000
+V011400         WHEN ZERO                                                01140000
+V011500             PERFORM PROCESS-PARA                                 01150000
+V011600         WHEN -305                                                01160000
+V011700             PERFORM PROCESS-PARA                                 01170000
+V011800         WHEN 100                                                 01180000
+V011900             MOVE 'Y' TO WS-TABLE-FLAG                            01190000
+V012000             PERFORM LOCATION-CHANGE-PARA                         01200000
+V012100         WHEN OTHER                                               01210000
+V012200             PERFORM ERROR-PARA                                   01220006
+V012300     END-EVALUATE.                                                01230000
+V012400                                                                  01240000
+V012500 PROCESS-PARA.                                                    01250000
+V012600     DISPLAY 'PROCESS-PARA ', HV-EMP-DESG, ' ', WS-INPUT          01260007
+V012700     PERFORM PER-MOVE-PARA                                        01270000
+V012800     PERFORM COMPUTE-PARA                                         01280000
+V012900     PERFORM UPDATE-PARA                                          01290000
+V013000     EVALUATE SQLCODE                                             01300000
+V013100         WHEN ZERO                                                01310000
+V013200             PERFORM MOVE-PARA                                    01320000
+V013300             PERFORM WRITE-PARA                                   01330000
+V013400         WHEN OTHER                                               01340000
+V013500             PERFORM ERROR-PARA                                   01350007
+V013600             DISPLAY 'UNKNOWN ERROR!!!'                           01360000
+V013700     END-EVALUATE.                                                01370000
+V013800                                                                  01380000
+V013900 PER-MOVE-PARA.                                                   01390000
+V014000     EVALUATE HV-EMP-DESG                                         01400002
+V014100         WHEN 1                                                   01410001
+V014200             MOVE WS-INPUT(4:2) TO WS-PER                         01420000
+V014300         WHEN 2                                                   01430001
+V014400             MOVE WS-INPUT(6:2) TO WS-PER                         01440000
+V014500         WHEN 3                                                   01450001
+V014600             MOVE WS-INPUT(8:2) TO WS-PER                         01460000
+V014700         WHEN 4                                                   01470001
+V014800             MOVE WS-INPUT(10:2) TO WS-PER                        01480001
+V014900     END-EVALUATE.                                                01490000
+V015000                                                                  01500000
+V015100 COMPUTE-PARA.                                                    01510000
+V015200     COMPUTE WS-EARN = HV-EMP-EARN + (WS-PER / 100) * HV-EMP-EARN 01520001
+V015300     COMPUTE WS-DEDN = (WS-PER / 100) * HV-EMP-EARN               01530001
+V015400     MOVE WS-EARN    TO HV-EMP-EARN                               01540001
+V015500     MOVE WS-DEDN    TO HV-EMP-DEDN.                              01550001
+V015600                                                                  01560000
+V015700 UPDATE-PARA.                                                     01570001
+V015800     EXEC SQL                                                     01580001
+V015900         UPDATE T11_EMPLOYEE_TABLE                                01590001
+V016000         SET EMP_EARN = :HV-EMP-EARN,                             01600001
+V016100             EMP_DEDN = :HV-EMP-DEDN                              01610001
+V016200         WHERE  CURRENT OF EMP_CUR                                01620001
+V016300     END-EXEC.                                                    01630001
+V016400                                                                  01640001
+V016500 MOVE-PARA.                                                       01650000
+V016600     MOVE HV-EMP-ID     TO P-ID                                   01660001
+V016700     MOVE HV-EMP-NAME   TO P-NAME                                 01670002
+V016800     MOVE HV-EMP-DESG   TO P-DESG                                 01680002
+V016900     MOVE HV-EMP-EARN   TO P-EARN                                 01690001
+V017000     MOVE HV-EMP-DEDN   TO P-DEDN                                 01700001
+V017100     COMPUTE WS-SAL  = HV-EMP-EARN - HV-EMP-DEDN                  01710001
+V017200     MOVE WS-SAL     TO WS-EMP-SAL                                01720000
+V017300     MOVE WS-EMP-SAL TO P-SAL.                                    01730001
+V017400                                                                  01740000
+V017500 WRITE-PARA.                                                      01750000
+V017600*    WRITE REPORT-RECORD FROM HEADING-LINE                        01760005
+V017700     WRITE REPORT-RECORD FROM DETAIL-LINE.                        01770000
+V017800     WRITE REPORT-RECORD FROM DETAIL-LINE1.                       01780001
+V017900                                                                  01790000
+V018000 LOCATION-CHANGE-PARA.                                            01800000
+V018100     PERFORM CLOSE-CURSOR                                         01810000
+V018200     PERFORM OPEN-CURSOR                                          01820000
+V018300     IF WS-EMP-LOC = WS-CHECK                                     01830000
+V018400         PERFORM CLOSE-CURSOR                                     01840000
+V018500         PERFORM END-PARA                                         01850000
+V018600     ELSE                                                         01860000
+V018700         MOVE 'N' TO WS-TABLE-FLAG                                01870000
+V018800         PERFORM SQL-PARA                                         01880000
+V018900     END-IF.                                                      01890000
+V019000                                                                  01900000
+V019100 END-PARA.                                                        01910000
+V019200*   WRITE REPORT-RECORD FROM TAIL-LINE                            01920007
+V019300     CLOSE REPORT-FILE                                            01930000
+V019400     STOP RUN.                                                    01940000
+V019500                                                                  01950006
+V019600 ERROR-PARA.                                                      01960006
+V019700     CALL 'DSNTIAR' USING SQLCA                                   01970006
+V019800           ERROR-LINE-LENGTH                                      01980006
+V019900           ERROR-MESSAGE                                          01990006
+V020000           SET EML-INDEX TO 1                                     02000006
+V020100     PERFORM UNTIL EML-INDEX > 10                                 02010006
+V020200     DISPLAY ERROR-MESSAGE-LINE(EML-INDEX)                        02020006
+V020300           SET EML-INDEX UP BY 1                                  02030006
+V020400     END-PERFORM.                                                 02040006
+VMEMBER NAME  PROG1
+V000100 IDENTIFICATION DIVISION.                                         00010009
+V000200 PROGRAM-ID. PROG1.                                               00020000
+V000300 DATA DIVISION.                                                   00030002
+V000400 WORKING-STORAGE SECTION.                                         00040003
+V000500 01  WS-EMP-ID          PIC X(05)  VALUE SPACES.                  00050000
+V000600     EXEC SQL                                                     00060001
+V000700        INCLUDE EMPLOYEE                                          00070001
+V000800     END-EXEC.                                                    00080001
+V000900     EXEC SQL                                                     00090001
+V001000        INCLUDE SQLCA                                             00100001
+V001100     END-EXEC.                                                    00110001
+V001200 PROCEDURE DIVISION.                                              00120007
+V001300 MAIN-PARA.                                                       00130008
+V001400     ACCEPT WS-EMP-ID.                                            00140000
+V001500     EXEC SQL                                                     00150000
+V001600        SELECT EMP_ID, EMP_NAME, EMP_LOC, EMP_DOB,                00160000
+V001700               EMP_TECH, EMP_EARN, EMP_DEDN                       00170000
+V001800        INTO :HV-EMP-ID, :HV-EMP-NAME, :HV-EMP-LOC, :HV-EMP-DOB,  00180005
+V001900              :HV-EMP-TECH, :HV-EMP-EARN, :HV-EMP-DEDN            00190005
+V002000        FROM T11_EMPLOYEE_TABLE                                   00200000
+V002100        WHERE EMP_ID = :WS-EMP-ID                                 00210000
+V002200     END-EXEC.                                                    00220000
+V002300     DISPLAY 'SELECT SQL = ', SQLCODE                             00230010
+V002400     EVALUATE SQLCODE                                             00240000
+V002500        WHEN ZERO                                                 00250000
+V002600           DISPLAY 'EMP = ', EMPLOYEE-RECORD                      00260000
+V002700        WHEN 100                                                  00270000
+V002800           DISPLAY 'INVALID EMP ID ', WS-EMP-ID                   00280000
+V002900        WHEN OTHER                                                00290000
+V003000           DISPLAY 'ERROR READING EMPLOYEE TABLE'                 00300000
+V003100     END-EVALUATE                                                 00310000
+V003200     STOP RUN.                                                    00320007
+VMEMBER NAME  PROG7
+V000100 IDENTIFICATION DIVISION.                                         00010000
+V000200 PROGRAM-ID. PROG06.                                              00020000
+V000300 ENVIRONMENT DIVISION.                                            00030000
+V000400 INPUT-OUTPUT SECTION.                                            00040000
+V000500                                                                  00050000
+V000600 FILE-CONTROL.                                                    00060000
+V000700     SELECT REPORT-FILE ASSIGN TO REPFILE                         00070000
+V000800     ACCESS MODE IS SEQUENTIAL                                    00080000
+V000900     ORGANIZATION IS SEQUENTIAL.                                  00090000
+V001000                                                                  00100000
+V001100 DATA DIVISION.                                                   00110000
+V001200 FILE SECTION.                                                    00120000
+V001300 FD  REPORT-FILE                                                  00130000
+V001400     RECORD CONTAINS 80 CHARACTERS                                00140000
+V001500     RECORDING MODE IS F.                                         00150000
+V001600 01  REPORT-RECORD PIC X(80).                                     00160000
+V001700                                                                  00170000
+V001800 WORKING-STORAGE SECTION.                                         00180000
+V001900 01  WS-ACCOUNT-NO       PIC 9(05)      VALUE SPACES.             00190001
+V002000 01  WS-TRANS-TYPE       PIC X(03)      VALUE SPACES.             00200001
+V002100 01  WS-OP-BALANCE       PIC 9(02)      VALUE ZERO.               00210001
+V002200 01  WS-OP-BALANCE-O     PIC 9(07)V99.                            00220001
+V002300 01  WS-CL-BALANCE       PIC 9(02)      VALUE ZERO.               00230001
+V002400 01  WS-CL-BALANCE-O     PIC ZZ,ZZZ,ZZZ9.99                       00240001
+V002500 01  ERROR-MESSAGE.                                               00250000
+V002600     03 ERROR-MESSAGE-LENGTH  PIC S9(04) COMP VALUE +800.         00260000
+V002700     03 ERROR-MESSAGE-LINE    PIC X(80)  OCCURS 10 TIMES          00270000
+V002800                          INDEXED BY EML-INDEX.                   00280000
+V002900     03 ERROR-LINE-LENGTH     PIC S9(9) COMP VALUE +80.           00290000
+V003000                                                                  00300000
+V003100     EXEC SQL                                                     00310000
+V003200         INCLUDE EMPLOYEE                                         00320000
+V003300     END-EXEC.                                                    00330000
+V003400     EXEC SQL                                                     00340000
+V003500         INCLUDE LOCATION                                         00350000
+V003600     END-EXEC.                                                    00360000
+V003700     EXEC SQL                                                     00370000
+V003800         INCLUDE SQLCA                                            00380000
+V003900     END-EXEC.                                                    00390000
+V004000                                                                  00400000
+V004100 01  HEADING-LINE.                                                00410000
+V004200     03  FILLER PIC X(06)      VALUE 'ID'.                        00420000
+V004300     03  FILLER PIC X(16)      VALUE 'NAME'.                      00430000
+V004400     03  FILLER PIC X(05)      VALUE 'DESG'.                      00440000
+V004500     03  FILLER PIC X(11)      VALUE 'EARNINGS '.                 00450000
+V004600     03  FILLER PIC X(11)      VALUE ' DEDUCTIONS'.               00460000
+V004700     03  FILLER PIC X(11)      VALUE '  SALARY'.                  00470000
+V004800                                                                  00480000
+V004900 01  DETAIL-LINE.                                                 00490000
+V005000     03  P-ID   PIC X(05)      VALUE SPACES.                      00500000
+V005100     03  FILLER PIC X(01)      VALUE SPACES.                      00510000
+V005200     03  P-NAME PIC X(15)      VALUE SPACES.                      00520000
+V005300     03  FILLER PIC X(01)      VALUE SPACES.                      00530000
+V005400     03  P-DESG PIC 9(01)      VALUE ZERO.                        00540000
+V005500     03  FILLER PIC X(05)      VALUE SPACES.                      00550000
+V005600     03  P-EARN PIC ZZ,ZZ9.99  VALUE ZERO.                        00560000
+V005700     03  FILLER PIC X(01)      VALUE SPACES.                      00570000
+V005800     03  P-DEDN PIC ZZ,ZZ9.99  VALUE ZERO.                        00580000
+V005900     03  FILLER PIC X(01)      VALUE SPACES.                      00590000
+V006000     03  P-SAL  PIC ZZ,ZZ9.99  VALUE ZERO.                        00600000
+V006100                                                                  00610000
+V006200 01  DETAIL-LINE1.                                                00620000
+V006300     03  FILLER PIC X(80)      VALUE ALL '-'.                     00630000
+V006400                                                                  00640000
+V006500*   01  DETAIL-LINE1.                                             00650000
+V006600*       03  FILLER PIC X(16)      VALUE ALL 'UPDATE FAILED!!!'.   00660000
+V006700                                                                  00670000
+V006800     EXEC SQL                                                     00680000
+V006900         DECLARE EMP_CUR CURSOR FOR                               00690000
+V007000         SELECT EMP_ID, EMP_NAME, EMP_LOC,                        00700000
+V007100                           EMP_DESG, EMP_EARN, EMP_DEDN           00710000
+V007200         FROM T11_EMPLOYEE_TABLE                                  00720000
+V007300         WHERE EMP_LOC = :WS-EMP-LOC AND                          00730000
+V007400               EMP_DESG IN (1, 2, 3, 4)                           00740000
+V007500         FOR UPDATE OF EMP_EARN, EMP_DEDN                         00750000
+V007600     END-EXEC.                                                    00760000
+V007700                                                                  00770000
+V007800 PROCEDURE DIVISION.                                              00780000
+V007900 MAIN-PARA.                                                       00790000
+V008000     PERFORM INIT-PARA                                            00800000
+V008100     PERFORM OPEN-CURSOR                                          00810000
+V008200     PERFORM SQL-PARA UNTIL WS-TABLE-FLAG = 'Y'                   00820000
+V008300     PERFORM CLOSE-CURSOR                                         00830000
+V008400     PERFORM END-PARA.                                            00840000
+V008500                                                                  00850000
+V008600 INIT-PARA.                                                       00860000
+V008700     OPEN OUTPUT REPORT-FILE.                                     00870000
+V008800     WRITE REPORT-RECORD FROM HEADING-LINE                        00880000
+V008900     WRITE REPORT-RECORD FROM DETAIL-LINE.                        00890000
+V009000                                                                  00900000
+V009100 OPEN-CURSOR.                                                     00910000
+V009200     ACCEPT WS-INPUT                                              00920000
+V009300     MOVE WS-INPUT(1:3) TO WS-EMP-LOC                             00930000
+V009400     EXEC SQL                                                     00940000
+V009500         OPEN EMP_CUR                                             00950000
+V009600     END-EXEC.                                                    00960000
+V009700                                                                  00970000
+V009800 CLOSE-CURSOR.                                                    00980000
+V009900     EXEC SQL                                                     00990000
+V010000         CLOSE EMP_CUR                                            01000000
+V010100     END-EXEC.                                                    01010000
+V010200                                                                  01020000
+V010300 SQL-PARA.                                                        01030000
+V010400     EXEC SQL                                                     01040000
+V010500         FETCH EMP_CUR                                            01050000
+V010600         INTO  :HV-EMP-ID, :HV-EMP-NAME, :HV-EMP-LOC,             01060000
+V010700         :HV-EMP-DESG,:HV-EMP-EARN, :HV-EMP-DEDN                  01070000
+V010800     END-EXEC                                                     01080000
+V010900     DISPLAY 'FETCH  SQL = ', SQLCODE                             01090000
+V011000     EVALUATE SQLCODE                                             01100000
+V011100         WHEN ZERO                                                01110000
+V011200             PERFORM PROCESS-PARA                                 01120000
+V011300         WHEN -305                                                01130000
+V011400             PERFORM PROCESS-PARA                                 01140000
+V011500         WHEN 100                                                 01150000
+V011600             MOVE 'Y' TO WS-TABLE-FLAG                            01160000
+V011700             PERFORM LOCATION-CHANGE-PARA                         01170000
+V011800         WHEN OTHER                                               01180000
+V011900             PERFORM ERROR-PARA                                   01190000
+V012000     END-EVALUATE.                                                01200000
+V012100                                                                  01210000
+V012200 PROCESS-PARA.                                                    01220000
+V012300     DISPLAY 'PROCESS-PARA ', HV-EMP-DESG, ' ', WS-INPUT          01230000
+V012400     PERFORM PER-MOVE-PARA                                        01240000
+V012500     PERFORM COMPUTE-PARA                                         01250000
+V012600     PERFORM UPDATE-PARA                                          01260000
+V012700     EVALUATE SQLCODE                                             01270000
+V012800         WHEN ZERO                                                01280000
+V012900             PERFORM MOVE-PARA                                    01290000
+V013000             PERFORM WRITE-PARA                                   01300000
+V013100         WHEN OTHER                                               01310000
+V013200             PERFORM ERROR-PARA                                   01320000
+V013300             DISPLAY 'UNKNOWN ERROR!!!'                           01330000
+V013400     END-EVALUATE.                                                01340000
+V013500                                                                  01350000
+V013600 PER-MOVE-PARA.                                                   01360000
+V013700     EVALUATE HV-EMP-DESG                                         01370000
+V013800         WHEN 1                                                   01380000
+V013900             MOVE WS-INPUT(4:2) TO WS-PER                         01390000
+V014000         WHEN 2                                                   01400000
+V014100             MOVE WS-INPUT(6:2) TO WS-PER                         01410000
+V014200         WHEN 3                                                   01420000
+V014300             MOVE WS-INPUT(8:2) TO WS-PER                         01430000
+V014400         WHEN 4                                                   01440000
+V014500             MOVE WS-INPUT(10:2) TO WS-PER                        01450000
+V014600     END-EVALUATE.                                                01460000
+V014700                                                                  01470000
+V014800 COMPUTE-PARA.                                                    01480000
+V014900     COMPUTE WS-EARN = HV-EMP-EARN + (WS-PER / 100) * HV-EMP-EARN 01490000
+V015000     COMPUTE WS-DEDN = (WS-PER / 100) * HV-EMP-EARN               01500000
+V015100     MOVE WS-EARN    TO HV-EMP-EARN                               01510000
+V015200     MOVE WS-DEDN    TO HV-EMP-DEDN.                              01520000
+V015300                                                                  01530000
+V015400 UPDATE-PARA.                                                     01540000
+V015500     EXEC SQL                                                     01550000
+V015600         UPDATE T11_EMPLOYEE_TABLE                                01560000
+V015700         SET EMP_EARN = :HV-EMP-EARN,                             01570000
+V015800             EMP_DEDN = :HV-EMP-DEDN                              01580000
+V015900         WHERE  CURRENT OF EMP_CUR                                01590000
+V016000     END-EXEC.                                                    01600000
+V016100                                                                  01610000
+V016200 MOVE-PARA.                                                       01620000
+V016300     MOVE HV-EMP-ID     TO P-ID                                   01630000
+V016400     MOVE HV-EMP-NAME   TO P-NAME                                 01640000
+V016500     MOVE HV-EMP-DESG   TO P-DESG                                 01650000
+V016600     MOVE HV-EMP-EARN   TO P-EARN                                 01660000
+V016700     MOVE HV-EMP-DEDN   TO P-DEDN                                 01670000
+V016800     COMPUTE WS-SAL  = HV-EMP-EARN - HV-EMP-DEDN                  01680000
+V016900     MOVE WS-SAL     TO WS-EMP-SAL                                01690000
+V017000     MOVE WS-EMP-SAL TO P-SAL.                                    01700000
+V017100                                                                  01710000
+V017200 WRITE-PARA.                                                      01720000
+V017300*    WRITE REPORT-RECORD FROM HEADING-LINE                        01730000
+V017400     WRITE REPORT-RECORD FROM DETAIL-LINE.                        01740000
+V017500     WRITE REPORT-RECORD FROM DETAIL-LINE1.                       01750000
+V017600                                                                  01760000
+V017700 LOCATION-CHANGE-PARA.                                            01770000
+V017800     PERFORM CLOSE-CURSOR                                         01780000
+V017900     PERFORM OPEN-CURSOR                                          01790000
+V018000     IF WS-EMP-LOC = WS-CHECK                                     01800000
+V018100         PERFORM CLOSE-CURSOR                                     01810000
+V018200         PERFORM END-PARA                                         01820000
+V018300     ELSE                                                         01830000
+V018400         MOVE 'N' TO WS-TABLE-FLAG                                01840000
+V018500         PERFORM SQL-PARA                                         01850000
+V018600     END-IF.                                                      01860000
+V018700                                                                  01870000
+V018800 END-PARA.                                                        01880000
+V018900*   WRITE REPORT-RECORD FROM TAIL-LINE                            01890000
+V019000     CLOSE REPORT-FILE                                            01900000
+V019100     STOP RUN.                                                    01910000
+V019200                                                                  01920000
+V019300 ERROR-PARA.                                                      01930000
+V019400     CALL 'DSNTIAR' USING SQLCA                                   01940000
+V019500           ERROR-LINE-LENGTH                                      01950000
+V019600           ERROR-MESSAGE                                          01960000
+V019700           SET EML-INDEX TO 1                                     01970000
+V019800     PERFORM UNTIL EML-INDEX > 10                                 01980000
+V019900     DISPLAY ERROR-MESSAGE-LINE(EML-INDEX)                        01990000
+V020000           SET EML-INDEX UP BY 1                                  02000000
+V020100     END-PERFORM.                                                 02010000
