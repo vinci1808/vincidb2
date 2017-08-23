@@ -1,0 +1,65 @@
+You need to Increment Earnings for New Joinees for a User Loc as follows -
+B Sc Grads = Rs x/-
+Engg Grads = Rs y/-
+WORKING-STORAGE SECTION.
+    EXEC SQL
+    DECLARE EMP_CUR CURSOR FOR
+    SELECT EMP_LOC, ENP_DESN, EMP_EARN, EMP_DEDN
+    FROM  T01_EMPLOYEE-tABLE
+    WHERE EMP_LOC = :WS-LOC
+    AND   EMP_DESN IN ('BG', 'EG')
+    FOR UPDATE OF EMP_EARN
+    END-EXEC
+PROCEDURE DIVISION.
+    EXEC SQL
+    OPEN EMP_CUR
+    END-EXEC
+In a Loop
+    EXEC SQL
+    FETCH EMP_CUR INTO Host Variables
+    END-EXEC
+    IF EMP-DESG = 'BG'
+    ADD AMOUNT-X TO EMP-EARN
+    ELSE
+    ADD AMOUNT-Y TO EMP-EARN
+    END-IF
+    EXEC SQL
+    UPDATE T01_EMPLOYEE_TABLE
+    SET EMP_EARN = :EMP-EARN
+    WHERE  CURRENT OF EMP_CUR
+    END-EXEC
+=======================================================================
+Create the following 2 Tables -
+1) Location Table - as before
+2) Employee Table - as below
+   CREATE TABLE T01_EMPLOYEE_TABLE
+   (EMP_ID CHAR(5) NOT NULL PRIMARY KEY,
+    EMP_NAME   CHAR(15) ,
+    EMP_LOC CHAR(3),
+    EMP_DESG   SMALLINT,
+    EMP_EARN   DECIMAL(7,2),
+    EMP_DEDN   DECIMAL(7,2))
+    FOREIGN KEY(EMP_LOC) REFERENCES T01_LOCATION_TABLE(LOC_ID)
+    ON DELETE RESTRICT)
+    IN PATNIDB1.PATNITS1;
+3) Location Table has 4 Rows for 'PUN', 'MUM', 'CHN' and 'BGL'
+4) Insert Rows into the above Employee Table as below -
+   - at least 8 Rows per Location, at least 2 per Designation(1, 2, 3 & 4)
+   There should be a minimum of 32 Rows in the Employee Table
+Program Specifications =
+1) Accept Increment Percentages per Designation for a Location from the User
+2) Update the Earnings & Deductions as -
+  Earnings = Earnings + Increment Percentage
+  Deductions   = 10% of New Earnings
+++++++++++++
+User Input will be given as follows -
+//SYSIN DD *
+LOCN1N2N3N4N5
+/*
+where LOC = Location Code
+      N1  = Increment Percentage for Designation = 1
+      N2  = Increment Percentage for Designation = 2
+      N3  = Increment Percentage for Designation = 3
+      N4  = Increment Percentage for Designation = 4
+      N5  = Increment Percentage for Designation = Other
+======================================================================

@@ -1,0 +1,155 @@
+Zero (Successful)[edit]
+  0    Successful
+Negative values (Errors)[edit]
+-007	The specified 'character' is not a valid character in SQL statements.
+-010	THE string constant beginning with string is not terminated properly.
+-029	INTO Clause required.
+-060	INVALID type SPECIFICATION : spec
+-084	Unacceptable SQL statement.
+-101	The statement is too long or too complex.
+-102	String constant is too long.
+-104	Illegal symbol encountered in the SQL statement.
+-117	The number of values in the INSERT does not match the number of columns.
+-122	Column or Expression in the Select List is not valid
+-142    sql statement is not expected
+-180	Bad data in Date/Time/Timestamp.
+-181	Bad data in Date/Time/Timestamp.
+-188	The host variable in a DESCRIBE statement is not a valid string representation of a name.
+-199	Illegal use of the specified keyword.
+-204	Object not defined to DB2.
+-205	Column name not in table.
+-206	Column does not exist in any table of the SELECT.
+-208	THE ORDER BY CLAUSE IS INVALID BECAUSE COLUMN column-name IS NOT PART OF THE RESULT TABLE
+-216	Not the same number of expressions on both sides of the comparison in a SELECT.
+-224	FETCH cannot make an INSENSITIVE cursor SENSITIVE.
+-229	The locale specified in a SET LOCALE statement was not found.
+-302	THE VALUE OF INPUT VARIABLE OR PARAMETER NUMBER position-number IS INVALID OR TOO LARGE FOR THE TARGET COLUMN OR THE TARGET VALUE
+-303	A VALUE CANNOT BE ASSIGNED TO OUTPUT HOST VARIABLE NUMBER position-number BECAUSE THE DATA TYPES ARE NOT COMPARABLE
+-305	Null indicator needed.
+-311	Varchar, insert or update. -LEN field with the right data length not set.
+-401	The data types of the operands of an operation are not compatible.
+-404	The Sql Statement specified contains a String that is too long.
+-407	AN UPDATE, INSERT, OR SET VALUE IS NULL, BUT THE OBJECT COLUMN column-name CANNOT CONTAIN NULL VALUES
+-408	A value is not compatible with the data type of its assignment target. Target name is "<name>". (***OBS: Para alguns casos o CAST resolve )
+-418	Use of parameter marker not valid.
+-420	The value of a string argument was not acceptable to the 'function-name' function
+-438	Application raised error with diagnostic text: text
+-440	Routine &1 in &2 not found with specified parameters.A function or procedure with the specified name and compatible arguments was not found.[1]
+-482	The procedure returned no locators.
+-501	Cursor not open on FETCH.
+-502	Opening cursor that is already open.
+-503	Updating column needs to be specified.
+-504	Cursor name not declared.
+-530	Referential integrity preventing the INSERT/UPDATE
+-532	Referential integrity (DELETE RESTRICT rule) preventing the DELETE.
+-536	Referential integrity (DELETE RESTRICT rule) preventing the DELETE.
+-540    table was not created using unique key 
+-545	Check constraint preventing the INSERT/UPDATE.
+-551	Authorization failure.
+-554	An authorization ID or a role cannot GRANT a privilege to itself.
+-601	You tried to create an object that already exists
+-602	Too many columns specified in a create index.
+-603	a unique index cannot be created because the table contains rows which are duplicates with respect to the values of the identified columns and periods
+-604	a data type definition specifies an invalid length, precision, or scale attribute
+-607	operation or option operation is not defined for this object
+-610	warning: a create/alter on object has placed object in pending
+-611	only lockmax 0 can be specified when the lock size of the tablespace is tablespace or table
+-612	identifier is a duplicate name
+-613	the primary key or a hash key or a unique constraint is too long or has too many columns and periods
+-614	the index cannot be created or altered, or the length of a column cannot be changed because the sum of the internal lengths of the columns for the index is greater than the allowable maximum
+-615	operation-type is not allowed on a package in use
+-616	obj-type1 obj-name1 cannot be dropped because it is referenced by obj-type2 obj-name2
+-617	a type 1 index is not valid for table
+-618	operation operation is not allowed on system databases
+-619	operation disallowed because the database is not stopped
+-620	keyword keyword in stmt-type statement is not permitted for a space-type space in the database-type database
+-621	duplicate dbid dbid was detected and previously assigned to database-name
+-622	for mixed data is invalid because the mixed data install option is no
+-623	cluster is not valid for table-name
+-624	table table-name already has a primary key or unique constraint with specified columns and periods
+-625	table table-name does not have an index to enforce the uniqueness of the primary or unique key
+-625	warning: the definition of table has been changed to incomplete
+-626	the alter statement is not executable because the page set is not stopped
+-627	the alter statement is invalid because the table space or index has user-managed data sets
+-628	the clauses are mutually exclusive
+-629	set null cannot be specified because foreign key name cannot contain null values
+-630	error: the WHERE NOT NULL specification is invalid for type 1 indexes
+-631	foreign key name is too long or has too many columns
+-632	the table cannot be defined as a dependent of table-name because of DELETE rule restrictions
+-633	the DELETE rule must be DELETE-rule
+-634	the DELETE rule must not be cascade
+-635	the DELETE rules cannot be different or cannot be set null
+-636	ranges specified for partition part-num are not valid
+-637	duplicate keyword-name keyword or clause
+-638	table table-name cannot be created because column definition is missing
+-639	a nullable column of a foreign key with a DELETE rule of set null cannot be a column of the key of a partitioned index
+-640	locksize row cannot be specified because table in this tablespace has type 1 index
+-642	too many columns in unique constraints
+-643	a check constraint or the value of an expression for a column of an index exceeds the maximum allowable length key expression
+-644	invalid value specified for keyword or clause keyword-or-clause in statement stmt-type
+-645	WHERE NOT NULL is ignored because the index key cannot contain null values
+-646	table table-name cannot be created in specified table space table-space-name because it already contains a table
+-647	bufferpool bp-name for implicit or explicit tablespace or indexspace name has not been activated
+-650	the alter statement cannot be executed, reason reason-code copyright 2014 TheAmericanProgrammer.com Unauthorized copying prohibited
+-651	table description exceeds maximum size of object descriptor.
+-652	violation of installation defined edit or validation procedure proc-name
+-653	table table-name in partitioned table space tspace-name is not available because its partitioned index has not been created
+-655	the create or alter stogroup is invalid because the storage group would have both specific and non-specific volume ids
+-658	a object-type cannot be dropped using the statement statement
+-660		-665	the partition clause of an alter statement is omitted or invalid
+-666	stmt-verb object cannot be executed because function is in progress
+-667	the clustering index for a partitioned table space cannot be explicitly dropped
+-668	the column cannot be added to the table because the table has an edit procedure defined with row attribute sensitivity
+-669	the object cannot be explicitly dropped. reason reason-code
+-670	the record length of the table exceeds the page size limit
+-671	the bufferpool attribute of the table space cannot be altered as specified because it would change the page size of the table space
+-672	operation drop not allowed on table table_name
+-676	the physical characteristics of the index are incompatible with respect to the specified statement. the statement has failed. reason reason-code
+-677	insufficient virtual storage for bufferpool expansion
+-678	the constant constant specified for the index limit key must conform to the data type data-type of the corresponding column column-name
+-679	the object name cannot be created because a drop is pending on the object
+-680	too many columns specified for a table, view or table function
+-681	column column-name in violation of installation defined field procedure. rt: return-code, rs: reason-code, msg: message-token
+-682	field procedure procedure-name could not be loaded
+-683	the specification for column, distinct type, function, or procedure data-item contains incompatible clauses
+-684	the length of constant list beginning string is too long
+-685	invalid field type, column-name
+-686	column defined with a field procedure can not compare with another column with different field procedure
+-687	field types incomparable
+-688	incorrect data returned from field procedure, column-name, msgno
+-689	too many columns defined for a dependent table
+-690	the statement is rejected by data definition control support. reason reason-code
+-691	the required registration table table-name does not exist
+-692	the required unique index index-name for ddl registration table table-name does not exist
+-693	the column column-name in ddl registration table or index name is not defined properly
+-694	the schema statement cannot be executed because a drop is pending on the ddl registration table table-name
+-694	the ddl statement cannot be executed because a drop is pending on the ddl registration table
+-695	invalid value seclabel specified for security label column of table table-name
+-696	the definition of trigger trigger-name includes an invalid use of correlation name or transition table name name. reason code=reason-code
+-697	old or new correlation names are not allowed in a trigger defined with the for each statement clause. old_table or new_table names are not allowed in a trigger with the before clause.
+-747	The table is not available.
+-803	Duplicate key on insert or update.
+-805	DBRM or package not found in plan.
+-811	More than one row retrieved in SELECT INTO.
+-818	Plan and program: timestamp mismatch.
+-904	Unavailable resource. Someone else is locking your data.
+-911	Deadlock or timeout. Rollback has been done.
+-913	Deadlock or timeout. No rollback.
+-922	Authorization needed.
+-924	DB2 Connection internal error.
+-927	The language interface was called but no connection had been made.
+-998	Error occurred during transaction or heuristic processing.
+ 	 
+-30090	Remote operation invalid for application execution environment.
+[1]
+
+Positive Values (Warnings)[edit]
+  +98	A dynamic SQL statement ends with a semicolon
++100	Row not found or end of cursor.
++222	Trying to fetch a row within a DELETE statement.
++223	Trying to fetch a row within an UPDATE statement.
++231	FETCH after a BEFORE or AFTER but not on a valid row.
++304	A value with data type (data type 1) cannot be assigned to a host variable because the value is not within the range of the host variable in position (position number) with data type (data type 2)
++354	A rowset fetch statement may have returned one or more rows of data. however, one or more warning conditions were also encountered. use the get diagnostics statement for more information regarding the conditions that were encountered
++562	A grant of a privilege was ignored because the grantee already has the privilege from the grantor.
++802	The null indicator was set to -2 as an arithmetic.

@@ -1,0 +1,894 @@
+VMEMBER NAME  CREATE1                                                           
+V  DROP   TABLE T13_EMPLOYEE_TABLE;                                             
+V  COMMIT;                                                                      
+V  CREATE TABLE T13_EMPLOYEE_TABLE                                              
+V   (EMP_ID        CHAR(5),                                                     
+V    EMP_NAME      CHAR(15),                                                    
+V    EMP_LOC       CHAR(3),                                                     
+V    EMP_DOB       DATE,                                                        
+V    EMP_TECH      CHAR(5),                                                     
+V    EMP_EARN      DECIMAL(7,2),                                                
+V    EMP_DEDN      DECIMAL(7,2))                                                
+V    IN PATNIDB1.PATNITS1;
+
+
+VMEMBER NAME  CREATE2                                                           
+V--DROP   TABLE T13_EMPLOYEE_TABLE2;                                            
+V--COMMIT;                                                                      
+V--                                                                             
+V--CREATE TABLE T13_EMPLOYEE_TABLE2                                             
+V-- (EMP_ID        CHAR(5)NOT NULL,                                             
+V--  EMP_NAME      CHAR(15),                                                    
+V--  EMP_LOC       CHAR(3),                                                     
+V--  EMP_DOB       DATE,                                                        
+V--  EMP_TECH      CHAR(5),                                                     
+V--  EMP_EARN      DECIMAL(7,2),                                                
+V--  EMP_DEDN      DECIMAL(7,2),                                                
+V--  PRIMARY KEY(EMP_ID))                                                       
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--                                                                             
+V--CREATE TABLE T13_EMPLOYEE_TABLE2                                             
+V-- (EMP_ID        CHAR(5)NOT NULL PRIMARY KEY,                                 
+V--  EMP_NAME      CHAR(15),                                                    
+V--  EMP_LOC       CHAR(3),                                                     
+V--  EMP_DOB       DATE,                                                        
+V--  EMP_TECH      CHAR(5),                                                     
+V--  EMP_EARN      DECIMAL(7,2),                                                
+V--  EMP_DEDN      DECIMAL(7,2))                                                
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--                                                                             
+V--CREATE UNIQUE INDEX EMPIDX ON T13_EMPLOYEE_TABLE2(EMP_ID);                   
+V--                                                                             
+V  CREATE TABLE T13_EMPLOYEE_TABLE2                                             
+V   (EMP_ID        CHAR(5)NOT NULL,                                             
+V    EMP_NAME      CHAR(15),                                                    
+V    EMP_LOC       CHAR(3),                                                     
+V    EMP_DOB       DATE,                                                        
+V    EMP_TECH      CHAR(5)NOT NULL,                                             
+V    EMP_EARN      DECIMAL(7,2),                                                
+V    EMP_DEDN      DECIMAL(7,2),                                                
+V    PRIMARY KEY(EMP_ID, EMP_TECH))                                             
+V    IN PATNIDB1.PATNITS1;                                                      
+V--                                                                             
+V  CREATE UNIQUE INDEX EMPIDX ON T13_EMPLOYEE_TABLE2(EMP_ID, EMP_T  
+
+
+
+VMEMBER NAME  CREATE4                                                           
+V--DROP   TABLE T13_EMPLOYEE_TABLE2;                                            
+V--COMMIT;                                                                      
+V--CREATE TABLE T13_EMPLOYEE_TABLE2                                             
+V-- (EMP_ID        CHAR(5)NOT NULL PRIMARY KEY,                                 
+V--  EMP_NAME      CHAR(15),                                                    
+V--  EMP_LOC       CHAR(3),                                                     
+V--  EMP_DOB       DATE,                                                        
+V--  EMP_TECH      CHAR(5),                                                     
+V--  EMP_EARN      DECIMAL(7,2),                                                
+V--  EMP_DEDN      DECIMAL(7,2),                                                
+V--  FOREIGN KEY(EMP_LOC) REFERENCES T13_LOCATION_TABLE(LOC_ID)                 
+V--  ON DELETE RESTRICT)                                                        
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--CREATE UNIQUE INDEX EMPIDX ON T13_EMPLOYEE_TABLE2(EMP_ID);                   
+V--                                                                             
+V--DROP   TABLE T13_EMPLOYEE_TABLE2;                                            
+V--COMMIT;                                                                      
+V--CREATE TABLE T13_EMPLOYEE_TABLE2                                             
+V-- (EMP_ID        CHAR(5)NOT NULL PRIMARY KEY,                                 
+V--  EMP_NAME      CHAR(15),                                                    
+V--  EMP_LOC       CHAR(3),                                                     
+V--  EMP_DOB       DATE,                                                        
+V--  EMP_TECH      CHAR(5),                                                     
+V--  EMP_EARN      DECIMAL(7,2),                                                
+V--  EMP_DEDN      DECIMAL(7,2),                                                
+V--  FOREIGN KEY(EMP_LOC) REFERENCES T13_LOCATION_TABLE(LOC_ID)                 
+V--  ON DELETE SET NULL)                                                        
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--CREATE UNIQUE INDEX EMPIDX ON T13_EMPLOYEE_TABLE2(EMP_ID);                   
+V--                                                                             
+V--DROP   TABLE T13_EMPLOYEE_TABLE2;                                            
+V--COMMIT;                                                                      
+V--CREATE TABLE T13_EMPLOYEE_TABLE2                                             
+V-- (EMP_ID        CHAR(5)NOT NULL PRIMARY KEY,                                 
+V--  EMP_NAME     VARCHAR(15),                                                  
+V--  EMP_LOC       CHAR(3),                                                     
+V--  EMP_DOB       DATE,                                                        
+V--  EMP_TECH      CHAR(5),                                                     
+V--  EMP_EARN      DECIMAL(7,2),                                                
+V--  EMP_DEDN      DECIMAL(7,2),                                                
+V--  FOREIGN KEY(EMP_LOC) REFERENCES T13_LOCATION_TABLE(LOC_ID)                 
+V--  ON DELETE CASCADE)                                                         
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--CREATE UNIQUE INDEX EMPIDX ON T13_EMPLOYEE_TABLE2(EMP_ID);                   
+V--                                                                             
+V--DROP   TABLE T13_EMPLOYEE_TABLE2;                                            
+V--COMMIT;                                                                      
+V  CREATE TABLE T13_EMP_MNGR_TABLE                                              
+V   (EMP_ID        CHAR(3),                                                     
+V    LAST_NAME     CHAR(15),                                                    
+V    MNGR_ID       CHAR(3))                                                     
+V    IN PATNIDB1.PATNITS1;  
+
+
+
+VMEMBER NAME  CREATE3                                                           
+V--DROP   TABLE T13_LOCATION_TABLE;                                             
+V--COMMIT;                                                                      
+V--                                                                             
+V--CREATE TABLE T13_LOCATION_TABLE                                              
+V-- (LOC_ID        CHAR(3)NOT NULL PRIMARY KEY,                                 
+V--  LOC_NAME   VARCHAR(15))                                                    
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--CREATE UNIQUE INDEX LOCIDX ON T13_LOCATION_TABLE(LOC_ID);                    
+V--                                                                             
+V  DROP   TABLE T13_EMPLOYEE_TABLE2;                                            
+V  COMMIT;                                                                      
+V  CREATE TABLE T13_EMPLOYEE_TABLE2                                             
+V   (EMP_ID        CHAR(5)NOT NULL PRIMARY KEY,                                 
+V    EMP_NAME     VARCHAR(15),                                                  
+V    EMP_LOC       CHAR(3),                                                     
+V    EMP_DOB       DATE,                                                        
+V    EMP_TECH      CHAR(5),                                                     
+V    EMP_EARN      DECIMAL(7,2),                                                
+V    EMP_DEDN      DECIMAL(7,2),                                                
+V    FOREIGN KEY(EMP_LOC) REFERENCES T13_LOCATION_TABLE(LOC_ID))                
+V    IN PATNIDB1.PATNITS1;                                                      
+V   CREATE UNIQUE INDEX EMPIDX ON T13_EMPLOYEE_TABLE2(EMP_ID);                  
+V--                                                                             
+V--CREATE TABLE T13_EMPLOYEE_TABLE2                                             
+V-- (EMP_ID        CHAR(5)NOT NULL,                                             
+V--  EMP_NAME      CHAR(15),                                                    
+V--  EMP_LOC       CHAR(3),                                                     
+V--  EMP_DOB       DATE,                                                        
+V--  EMP_TECH      CHAR(5)NOT NULL,                                             
+V--  EMP_EARN      DECIMAL(7,2),                                                
+V--  EMP_DEDN      DECIMAL(7,2),                                                
+V--  PRIMARY KEY(EMP_ID, EMP_TECH))                                             
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--                                                                             
+V--CREATE UNIQUE INDEX EMPIDX ON T13_EMPLOYEE_TABLE2(EMP_ID, EMP_T              
+V--                                                                             
+V--CREATE TABLE T13_DEPT_TABLE                                                  
+V-- (DEPT_NO       CHAR(3),                                                     
+V--  DEPT_NAME     CHAR(11))                                                    
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--                                                                             
+V--CREATE TABLE T13_EMPLOYEE_TABLE3                                             
+V-- (EMP_NO       CHAR(4),                                                      
+V--  WORK_DEPT    CHAR(3))                                                      
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--                                                                             
+V--SELECT * FROM T13_DEPT_TABLE;                                                
+V--SELECT * FROM T13_EMPLOYEE_TABLE3;    
+
+
+VMEMBER NAME  CREATE5                                                           
+V--DROP   TABLE T13_DT;                                                         
+V--COMMIT;                                                                      
+V--CREATE TABLE T13_DT                                                          
+V-- (STARTDT    DATE)                                                           
+V--  IN PATNIDB1.PATNITS1;                                                      
+V--                                                                             
+V--                                                                             
+V--DROP   TABLE T13_EMPLOYEE_TABLE3;                                            
+V--COMMIT;                                                                      
+V--                                                                             
+V  CREATE TABLE T13_EMPLOYEE_TABLE3                                             
+V   (EMP_ID        CHAR(5)NOT NULL PRIMARY KEY,                                 
+V    EMP_NAME      CHAR(15),                                                    
+V    EMP_LOC       CHAR(3),                                                     
+V    EMP_DESG      SMALLINT,                                                    
+V    EMP_EARN      DECIMAL(7,2),                                                
+V    EMP_DEDN      DECIMAL(7,2),                                                
+V    FOREIGN KEY(EMP_LOC) REFERENCES T13_LOCATION_TABLE(LOC_ID)                 
+V    ON DELETE RESTRICT)                                                        
+V    IN PATNIDB1.PATNITS1;                                                      
+V  CREATE UNIQUE INDEX EMPIDX1 ON T13_EMPLOYEE_TABLE3(EMP_ID);                                           
+V--                         
+++++++++++++++++++++++++++++++++++++++++++++++++
+                                                      
+VMEMBER NAME  UPDATE1                                                           
+V--SELECT * FROM T13_EMPLOYEE_TABLE;                                            
+V--UPDATE T13_EMPLOYEE_TABLE                                                    
+V--   SET EMP_EARN = EMP_EARN + 1000,                                           
+V--       EMP_DEDN = EMP_DEDN + 100                                             
+V-- WHERE EMP_LOC = 'PUN';                                                      
+V--                                                                             
+V  SELECT * FROM T13_EMPLOYEE_TABLE;                                            
+V  DELETE FROM T13_EMPLOYEE_TABLE                                               
+V     WHERE EMP_LOC = 'PUN';                                                    
+V  SELECT * FROM T13_EMPLOYEE_TABLE; 
+
+
+VMEMBER NAME  UPDATE2                                                           
+V--SELECT * FROM T13_EMPLOYEE_TABLE2;                                           
+V--UPDATE T13_EMPLOYEE_TABLE2                                                   
+V--   SET EMP_LOC = 'PUN'                                                       
+V-- WHERE EMP_LOC = 'CHN';                                                      
+V--SELECT * FROM T13_EMPLOYEE_TABLE2;                                           
+V--                                                                             
+V--SELECT * FROM T13_EMPLOYEE_TABLE2;                                           
+V--UPDATE T13_EMPLOYEE_TABLE2                                                   
+V--   SET EMP_LOC = 'PUN'                                                       
+V-- WHERE EMP_LOC = 'CHN';                                                      
+V--SELECT * FROM T13_EMPLOYEE_TABLE2;                                           
+V--                                                                             
+V  SELECT * FROM T13_EMPLOYEE_TABLE2;                                           
+V  DELETE FROM T13_EMPLOYEE_TABLE2                                              
+V     WHERE EMP_LOC = 'PUN';                                                    
+V  SELECT * FROM T13_EMPLOYEE_TABLE2;                                           
+V--                                                                             
+V  SELECT * FROM T13_LOCATION_TABLE;                                            
+V  DELETE FROM T13_LOCATION_TABLE                                               
+V     WHERE EMP_LOC = 'PUN';                                                    
+V  SELECT * FROM T13_LOCATION_TABLE;     
+
+
+                                       
+VMEMBER NAME  UPDATE3                                                           
+V--SELECT * FROM T13_EMPLOYEE_TABLE;                                            
+V--UPDATE T13_EMPLOYEE_TABLE                                                    
+V--   SET EMP_EARN = EMP_EARN + 1000,                                           
+V--       EMP_DEDN = EMP_DEDN + 100                                             
+V-- WHERE EMP_LOC = 'PUN';                                                      
+V--                                                                             
+V  SELECT * FROM T13_EMPLOYEE_TABLE;                                            
+V  DELETE FROM T13_EMPLOYEE_TABLE                                               
+V     WHERE EMP_LOC = 'PUN';                                                    
+V  SELECT * FROM T13_EMPLOYEE_TABLE;  
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+                                                   
+VMEMBER NAME  SELINRJ                                                           
+V--SELECT * FROM T13_LOCATION_TABLE;                                            
+V--SELECT * FROM T13_EMPLOYEE_TABLE2;                                           
+V--                                                                             
+V--SELECT E.EMP_ID, E.EMP_NAME, E.EMP_LOC, L.LOC_NAME, E.EMP_DOB                
+V--FROM T13_EMPLOYEE_TABLE2 E                                                   
+V--INNER JOIN T13_LOCATION_TABLE L                                              
+V--ON E.EMP_LOC = L.LOC_ID;                                                     
+V--                                                                             
+V  SELECT E.EMP_ID, E.EMP_NAME, E.EMP_LOC, L.LOC_NAME, E.EMP_DOB                
+V  FROM T13_EMPLOYEE_TABLE2 E,                                                  
+V       T13_LOCATION_TABLE L                                                    
+V  WHERE E.EMP_LOC = L.LOC_ID;                                                  
+V                            
+
+
+
+
+                                                   
+VMEMBER NAME  SELECT4                                                           
+V--SELECT * FROM T13_DT;                                                        
+V--SELECT STARTDT,DAY(STARTDT),MONTH(STARTDT),                                  
+V--YEAR(STARTDT) FROM T13_DT WHERE YEAR(STARTDT) > 2000                         
+V--                                                                             
+V  SELECT * FROM T13_DEPT_TABLE;                                                
+V  SELECT * FROM T13_EMPLOYEE_TABLE3;                                           
+V  SELECT D.DEPT_NO, D.DEPT_NAME, E.EMP_NO                                      
+V  FROM T13_DEPT_TABLE D                                                        
+V  LEFT JOIN T13_EMPLOYEE_TABLE3 E                                              
+V  ON D.DEPT_NO = E.WORK_DEPT;                                                  
+V--                                                                             
+V  SELECT * FROM T13_DEPT_TABLE;                                                
+V  SELECT * FROM T13_EMPLOYEE_TABLE3;                                           
+V  SELECT E.WORK_DEPT, D.DEPT_NAME, E.EMP_NO                                    
+V  FROM T13_DEPT_TABLE D                                                        
+V  RIGHT JOIN T13_EMPLOYEE_TABLE3 E                                             
+V  ON D.DEPT_NO = E.WORK_DEPT;      
+
+
+
+VMEMBER NAME  SELECT5                                                           
+V--SELECT E1.EMP_ID, E1.LAST_NAME, E1.MNGR_ID, E2.LAST_NAME                     
+V--FROM T13_EMP_MNGR_TABLE E1,                                                  
+V--     T13_EMP_MNGR_TABLE E2                                                   
+V--WHERE E1.MNGR_ID = E2.EMP_ID                                                 
+V--ORDER BY E1.EMP_ID;                                                          
+V--                                                                             
+V  DROP VIEW T13_V1;                                                            
+V  COMMIT;                                                                      
+V  DROP VIEW T13_V2;                                                            
+V  COMMIT;                                                                      
+V  SELECT * FROM T13_EMPLOYEE_TABLE2;                                           
+V  CREATE VIEW T13_V1 AS                                                        
+V   SELECT EMP_ID, EMP_NAME, EMP_LOC, EMP_DOB, EMP_TECH                         
+V   FROM T13_EMPLOYEE_TABLE2;                                                   
+V  SELECT * FROM T13_V1;   
+
+
+
+VMEMBER NAME  SELECT2                                                           
+V--SELECT * FROM T13_LOCATION_TABLE;                                            
+V  SELECT * FROM T13_EMPLOYEE_TABLE2;  
+
+
+                                         
+
+
+                                                    
+VMEMBER NAME  SELECT3                                                           
+V--SELECT EMP_NAME, LENGTH(EMP_NAME) FROM T13_EMPLOYEE_TABLE2;                  
+V  SELECT * FROM T13_LOCATION_TABLE;                                            
+
+
+
+
+                                                    
+VMEMBER NAME  SELECT1                                                           
+V--SELECT EMP_NAME, EMP_EARN, EMP_DEDN,                                         
+V--       EMP_EARN - EMP_DEDN AS TOTAL_SALARY                                   
+V--FROM T13_EMPLOYEE_TABLE;                                                     
+V--SELECT COUNT(*) AS TOTAL_ROWS                                                
+V-- FROM T13_EMPLOYEE_TABLE                                                     
+V--                                                                             
+V--SELECT EMP_LOC, COUNT(*) AS TOTAL_ROWS                                       
+V-- FROM T13_EMPLOYEE_TABLE                                                     
+V-- GROUP BY EMP_LOC;                                                           
+V--                                                                             
+V--SELECT EMP_LOC,EMP_TECH, COUNT(*) AS TOTAL_ROWS                              
+V-- FROM T13_EMPLOYEE_TABLE                                                     
+V-- GROUP BY EMP_LOC, EMP_TECH;                                                 
+V--                                                                             
+V--SELECT CREATOR, NAME FROM SYSIBM.SYSTABLES;                                  
+V--SELECT * FROM SYSIBM.SYSTABLES                                               
+V  SELECT * FROM T13_EMPLOYEE_TABLE3;                                           
+V--                                                                             
+V--SELECT DISTINCT EMP_LOC FROM T13_EMPLOYEE_TABLE;                             
+V--SELECT DISTINCT EMP_TECH FROM T13_EMPLOYEE_TABLE;                            
+V--SELECT DISTINCT EMP_TECH, EMP_LOC FROM T13_EMPLOYEE_TABLE;                   
+V--                                                                             
+V--WHERE EMP_LOC LIKE 'B%';                                                     
+V--                                                                             
+V--WHERE EMP_LOC LIKE '__R';                                                    
+V--                                                                             
+V--WHERE EMP_NAME LIKE 'M%%I';                                                  
+V--ORDER BY EMP_ID,                                                             
+V--         EMP_LOC DESC,                                                       
+V--         EMP_TECH;                                                           
+V--                                                                             
+V--WHERE EMP_LOC = 'PUN';                                                       
+V--                                                                             
+V--WHERE EMP_LOC = 'PUN' OR                                                     
+V--      EMP_TECH = 'M/F';                                                      
+V--                                                                             
+V--WHERE EMP_LOC = 'PUN' AND                                                    
+V--      EMP_TECH = 'M/F';                                                      
+V--                                                                             
+V--WHERE EMP_LOC IS NULL OR                                                     
+V--      EMP_TECH IS NULL;                                                      
+V--                                                                             
+V--WHERE EMP_LOC IN ('BGR', 'PUN');                                             
+V--                                                                             
+V--WHERE NOT EMP_LOC = 'PUN';                                                   
+V--                                                                             
+V--WHERE NOT EMP_LOC IN ('PUN', 'BGR');                                         
+V--                                                                             
+V--SELECT MIN(EMP_DEDN) AS MIN_DEDN,                                            
+V--       MAX(EMP_DEDN) AS MIN_DEDN,                                            
+V--       SUM(EMP_EARN) AS TOT_EARN,                                            
+V--       SUM(EMP_DEDN) AS TOT_DEDN                                             
+V--FROM T13_EMPLOYEE_TABLE2;                                                    
+V--                                                                             
+V  SELECT SUM(EMP_EARN) AS TOT_EARN,                                            
+V         SUM(EMP_DEDN) AS TOT_DEDN,                                            
+V  FROM T13_EMPLOYEE_TABLE2;                                                    
+V--                                                                             
+V--                                                                             
+V--SELECT EMP_LOC, COUNT(*)                                                     
+V--FROM T13_EMPLOYEE_TABLE                                                      
+V--GROUP BY EMP_LOC HAVING COUNT(*) < 10;                                       
+V--                                                                             
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                                           
+VMEMBER NAME  INSERT1                                                           
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V   (EMP_ID,                                                                    
+V    EMP_NAME,                                                                  
+V    EMP_LOC,                                                                   
+V    EMP_DOB,                                                                   
+V    EMP_TECH,                                                                  
+V    EMP_EARN,                                                                  
+V    EMP_DEDN)                                                                  
+V    VALUES('10001',                                                            
+V           'EMP NAME - 101',                                                   
+V           'PUN',                                                              
+V           '1990-01-01',                                                       
+V           'M/F',                                                              
+V           10000.0,                                                            
+V           1000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V    VALUES('20002',                                                            
+V           'EMP NAME - 200',                                                   
+V           'PUN',                                                              
+V           '1990-02-02',                                                       
+V           'M/F',                                                              
+V           20000.0,                                                            
+V           2000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V    VALUES('30003',                                                            
+V           'EMP NAME - 303',                                                   
+V           'MUM',                                                              
+V           '1990-03-03',                                                       
+V           NULL,                                                               
+V           30000.0,                                                            
+V           3000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V    VALUES('40004',                                                            
+V           'EMP NAME - 404',                                                   
+V           'BGR',                                                              
+V           '1990-04-04',                                                       
+V           '   ',                                                              
+V           40000.0,                                                            
+V           4000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V    VALUES('50005',                                                            
+V           'EMP NAME - 505',                                                   
+V           'BGR',                                                              
+V           '1990-05-05',                                                       
+V           '   ',                                                              
+V           0,                                                                  
+V           0);                                                                 
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V    VALUES('60006',                                                            
+V           'MONALISA PADHI',                                                   
+V           'BBR',                                                              
+V           '1996-08-18',                                                       
+V           'TEST',                                                             
+V           70000.0,                                                            
+V           6000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V    VALUES('70007',                                                            
+V           'EMP NAME - 707',                                                   
+V           'BBR',                                                              
+V           '1990-07-07',                                                       
+V           'JAVA',                                                             
+V           70000.0,                                                            
+V           7000.0);  
+
+
+
+VMEMBER NAME  INSERT2                                                           
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V   (EMP_ID,                                                                    
+V    EMP_NAME,                                                                  
+V    EMP_LOC,                                                                   
+V    EMP_DOB,                                                                   
+V    EMP_TECH,                                                                  
+V    EMP_EARN,                                                                  
+V    EMP_DEDN)                                                                  
+V    VALUES('80008',                                                            
+V           'MONALISA',                                                         
+V           'MUM',                                                              
+V           '1996-08-18',                                                       
+V           'TEST',                                                             
+V           80000.0,                                                            
+V           8000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V    VALUES('90009',                                                            
+V           'USASI ABHIPSA',                                                    
+V           'BGR',                                                              
+V           '2000-05-03',                                                       
+V           'M/F',                                                              
+V           90000.0,                                                            
+V           9000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V    VALUES('30005',                                                            
+V           'SANJUKTA PADHI',                                                   
+V           'CHN',                                                              
+V           '1990-03-05',                                                       
+V          'JAVA',                                                              
+V           30000.0,                                                            
+V           5000.0);                                                            
+V--                          
+
+
+
+VMEMBER NAME  INSERT4                                                           
+V--                                                                             
+V--INSERT INTO T13_DT                                                           
+V-- (STARTDT)                                                                   
+V--  VALUES('2001-02-18');                                                      
+V--                                                                             
+V--INSERT INTO T13_DT                                                           
+V--  VALUES('2005-09-05');                                                      
+V--                                                                             
+V--INSERT INTO T13_DEPT_TABLE                                                   
+V-- (DEPT_NO, DEPT_NAME)                                                        
+V--  VALUES('A01', 'ACCOUNTING');                                               
+V--                                                                             
+V--INSERT INTO T13_DEPT_TABLE                                                   
+V--  VALUES('A02', 'PAYROLL');                                                  
+V--                                                                             
+V--INSERT INTO T13_DEPT_TABLE                                                   
+V--  VALUES('A03', 'OPERATIONS');                                               
+V--                                                                             
+V--INSERT INTO T13_DEPT_TABLE                                                   
+V--  VALUES('A04', 'PERSONNEL');                                                
+V--                                                                             
+V--INSERT INTO T13_DEPT_TABLE                                                   
+V--  VALUES('A05', 'MAINTENANCE');                                              
+V--                                                                             
+V--INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V-- (EMP_NO, WORK_DEPT)                                                         
+V--  VALUES('5001', 'A01');                                                     
+V--                                                                             
+V--INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V--  VALUES('5002', 'A04');                                                     
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('5003', 'A03');                                                     
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('5004', 'A03');                                                     
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('5005', 'A04');                                                     
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('5006', 'A04');                                                     
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('5007', 'A03');                                                     
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('5008', 'A06');                                                     
+V--                              
+
+
+
+                                               
+VMEMBER NAME  INSERT5                                                           
+V--                                                                             
+V  INSERT INTO T13_EMP_MNGR_TABLE                                               
+V   (EMP_ID, LAST_NAME, MNGR_ID)                                                
+V    VALUES('100', 'KING', '   ');                                              
+V  INSERT INTO T13_EMP_MNGR_TABLE                                               
+V    VALUES('101', 'KOCHHAR', '100');                                           
+V  INSERT INTO T13_EMP_MNGR_TABLE                                               
+V    VALUES('102', 'DE HAAN', '100');                                           
+V  INSERT INTO T13_EMP_MNGR_TABLE                                               
+V    VALUES('103', 'HUNOLD', '102');                                            
+V  INSERT INTO T13_EMP_MNGR_TABLE                                               
+V    VALUES('104', 'ERNST', '103');                                             
+V  INSERT INTO T13_EMP_MNGR_TABLE                                               
+V    VALUES('107', 'LORENTZ', '103');                                           
+V  INSERT INTO T13_EMP_MNGR_TABLE                                               
+V    VALUES('124', 'MOURGOS', '100');  
+
+VMEMBER NAME  INSERT3                                                           
+V--INSERT INTO T13_LOCATION_TABLE                                               
+V--   VALUES('CHN', 'CHENNAI');                                                 
+V--INSERT INTO T13_LOCATION_TABLE                                               
+V--   VALUES('PUN', 'PUNE');                                                    
+V--INSERT INTO T13_LOCATION_TABLE                                               
+V--   VALUES('MUM', 'MUMBAI');                                                  
+V--INSERT INTO T13_LOCATION_TABLE                                               
+V--   VALUES('BGL', 'BENGALURU');                                               
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V     VALUES('50005', 'SANJUKTA', 'CHN', '1990-01-01', 'TEST',                  
+V     0, 0);                                                                    
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V     VALUES('60006', 'PRADYUMNA', 'BGL', '1990-02-02', 'JAVA',                 
+V     NULL, NULL);                                                              
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V     VALUES('70007', 'USASI ABHIPSA', 'PUN', '1990-03-03', 'M/F',              
+V     60000.00, 6000.00);                                                       
+V  INSERT INTO T13_EMPLOYEE_TABLE2                                              
+V     VALUES('80008', 'MONALI', 'MUM', '1990-04-04','JAVA',                     
+V     40000.00, 4000.00);   
+
+
+
+VMEMBER NAME  INSERT6                                                           
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V   (EMP_ID,                                                                    
+V    EMP_NAME,                                                                  
+V    EMP_LOC,                                                                   
+V    EMP_DESG,                                                                  
+V    EMP_EARN,                                                                  
+V    EMP_DEDN)                                                                  
+V    VALUES('10001',                                                            
+V           'EMP NAME - 101',                                                   
+V           'PUN',                                                              
+V            01,                                                                
+V           10000.0,                                                            
+V           1000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('20002',                                                            
+V           'EMP NAME - 202',                                                   
+V           'PUN',                                                              
+V            01,                                                                
+V           20000.0,                                                            
+V           2000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('30003',                                                            
+V           'EMP NAME - 303',                                                   
+V           'PUN',                                                              
+V            02,                                                                
+V           30000.0,                                                            
+V           3000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('40004',                                                            
+V           'EMP NAME - 404',                                                   
+V           'PUN',                                                              
+V            02,                                                                
+V           40000.0,                                                            
+V           4000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('50005',                                                            
+V           'EMP NAME - 505',                                                   
+V           'PUN',                                                              
+V            03,                                                                
+V           50000.0,                                                            
+V           5000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('60006',                                                            
+V           'EMP NAME - 606',                                                   
+V           'PUN',                                                              
+V            03,                                                                
+V           60000.0,                                                            
+V           6000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('70007',                                                            
+V           'EMP NAME - 707',                                                   
+V           'PUN',                                                              
+V            04,                                                                
+V           70000.0,                                                            
+V           7000.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('80008',                                                            
+V           'EMP NAME - 808',                                                   
+V           'PUN',                                                              
+V            04,                                                                
+V           80000.0,                                                            
+V           8000.0);                                                            
+V--                                                                             
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('10101',                                                            
+V           'EMP NAME - 111',                                                   
+V           'CHN',                                                              
+V            01,                                                                
+V           10101.0,                                                            
+V           1010.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('20202',                                                            
+V           'EMP NAME - 222',                                                   
+V           'CHN',                                                              
+V            01,                                                                
+V           20202.0,                                                            
+V           2020.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('30303',                                                            
+V           'EMP NAME - 333',                                                   
+V           'CHN',                                                              
+V            02,                                                                
+V           30303.0,                                                            
+V           3030.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('40404',                                                            
+V           'EMP NAME - 444',                                                   
+V           'CHN',                                                              
+V            02,                                                                
+V           40404.0,                                                            
+V           4040.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('50505',                                                            
+V           'EMP NAME - 555',                                                   
+V           'CHN',                                                              
+V            03,                                                                
+V           50505.0,                                                            
+V           5050.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('60606',                                                            
+V           'EMP NAME - 666',                                                   
+V           'CHN',                                                              
+V            03,                                                                
+V           60606.0,                                                            
+V           6060.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('70707',                                                            
+V           'EMP NAME - 777',                                                   
+V           'CHN',                                                              
+V            04,                                                                
+V           70707.0,                                                            
+V           7070.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('80808',                                                            
+V           'EMP NAME - 888',                                                   
+V           'CHN',                                                              
+V            04,                                                                
+V           80808.0,                                                            
+V           8080.0);                                                            
+V--                                                                             
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('11111',                                                            
+V           'EMP NAME - 001',                                                   
+V           'BGL',                                                              
+V            01,                                                                
+V           11111.0,                                                            
+V           1111.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('22222',                                                            
+V           'EMP NAME - 002',                                                   
+V           'BGL',                                                              
+V            01,                                                                
+V           22222.0,                                                            
+V           2222.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('33333',                                                            
+V           'EMP NAME - 003',                                                   
+V           'BGL',                                                              
+V            02,                                                                
+V           33333.0,                                                            
+V           3333.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('44444',                                                            
+V           'EMP NAME - 004',                                                   
+V           'BGL',                                                              
+V            02,                                                                
+V           44444.0,                                                            
+V           4444.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('55555',                                                            
+V           'EMP NAME - 005',                                                   
+V           'BGL',                                                              
+V            03,                                                                
+V           55555.0,                                                            
+V           5555.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('66666',                                                            
+V           'EMP NAME - 006',                                                   
+V           'BGL',                                                              
+V            03,                                                                
+V           66666.0,                                                            
+V           6666.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('77777',                                                            
+V           'EMP NAME - 007',                                                   
+V           'BGL',                                                              
+V            04,                                                                
+V           77777.0,                                                            
+V           7777.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('88888',                                                            
+V           'EMP NAME - 008',                                                   
+V           'BGL',                                                              
+V            04,                                                                
+V           88888.0,                                                            
+V           8888.0);                                                            
+V--                                                                             
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('00001',                                                            
+V           'EMP NAME - 100',                                                   
+V           'MUM',                                                              
+V            01,                                                                
+V           01010.0,                                                            
+V           0101.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('00002',                                                            
+V           'EMP NAME - 200',                                                   
+V           'MUM',                                                              
+V            01,                                                                
+V           02020.0,                                                            
+V           0202.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('00003',                                                            
+V           'EMP NAME - 300',                                                   
+V           'MUM',                                                              
+V            02,                                                                
+V           03030.0,                                                            
+V           0303.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('00004',                                                            
+V           'EMP NAME - 400',                                                   
+V           'MUM',                                                              
+V            02,                                                                
+V           04040.0,                                                            
+V           0404.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('00005',                                                            
+V           'EMP NAME - 500',                                                   
+V           'MUM',                                                              
+V            03,                                                                
+V           05050.0,                                                            
+V           0505.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('00006',                                                            
+V           'EMP NAME - 600',                                                   
+V           'MUM',                                                              
+V            03,                                                                
+V           06060.0,                                                            
+V           0606.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('00007',                                                            
+V           'EMP NAME - 700',                                                   
+V           'MUM',                                                              
+V            04,                                                                
+V           07070.0,                                                            
+V           0707.0);                                                            
+V--                                                                             
+V  INSERT INTO T13_EMPLOYEE_TABLE3                                              
+V    VALUES('00008',                                                            
+V           'EMP NAME - 800',                                                   
+V           'MUM',                                                              
+V            04,                                                                
+V           08080.0,                                                            
+V           0808.0);                 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                          
+
+
+
+            
+
+
+
+                                          
+
+
+
+
+
+
+                                            
+
+
+
+                                                    
+
+
+
+
+
+                                         
+
+
+
+                                                     
+
+
+
+                                       

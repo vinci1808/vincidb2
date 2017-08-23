@@ -1,0 +1,218 @@
+000100 IDENTIFICATION DIVISION.                                         00010000
+000200 PROGRAM-ID. PROG6.                                               00020001
+000300 ENVIRONMENT DIVISION.                                            00030000
+000400 INPUT-OUTPUT SECTION.                                            00040000
+000500 FILE-CONTROL.                                                    00050000
+000600     SELECT REPORT-FILE ASSIGN TO REPFILE                         00060000
+000700     FILE STATUS IS WS-REP-STAT.                                  00070000
+000800 DATA DIVISION.                                                   00080000
+000900 FILE SECTION.                                                    00090000
+001000 FD  REPORT-FILE                                                  00100000
+001100     RECORD CONTAINS 80 CHARACTERS                                00110000
+001200     RECORDING MODE IS F.                                         00120000
+001300 01 REPORT-RECORD PIC X(80).                                      00130000
+001400 WORKING-STORAGE SECTION.                                         00140000
+001500 01 LOCATION-NAME.                                                00150000
+001600      03 FILLER                 PIC X(24) VALUE                   00160000
+001700         'EMPLOYEES IN LOCATION:- '.                              00170000
+001800      03 P-LOC-NAME             PIC X(12) VALUE SPACES.           00180000
+001900 01 HEADING-LINE1.                                                00190000
+002000      03  FILLER           PIC X(06) VALUE 'ID'.                  00200001
+002100      03  FILLER           PIC X(16) VALUE 'NAME'.                00210001
+002200      03  FILLER           PIC X(03) VALUE 'DES'.                 00220001
+002300      03  FILLER           PIC X(11) VALUE '  EARNINGS '.         00230000
+002400      03  FILLER           PIC X(11) VALUE 'DEDUCTIONS '.         00240000
+002500      03  FILLER           PIC X(10) VALUE ' TOTAL SAL'.          00250000
+002600 01  DETAIL-LINE.                                                 00260000
+002700      03  P-ID             PIC X(05)      VALUE SPACES.           00270000
+002800      03  FILLER           PIC X(01)      VALUE SPACES.           00280000
+002900      03  P-NAME           PIC X(15)      VALUE SPACES.           00290000
+003000      03  FILLER           PIC X(01)      VALUE SPACES.           00300000
+003100      03  P-DESG           PIC X(02)      VALUE SPACES.           00310001
+003200      03  FILLER           PIC X(01)      VALUE SPACES.           00320000
+003300      03  P-EARN           PIC ZZZ,ZZ9.99 VALUE ZERO.             00330000
+003400      03  FILLER           PIC X(01)      VALUE SPACES.           00340000
+003500      03  P-DEDN           PIC ZZZ,ZZ9.99 VALUE ZERO.             00350000
+003600      03  FILLER           PIC X(01)      VALUE SPACES.           00360000
+003700      03  P-SAL            PIC ZZZ,ZZ9.99 VALUE ZERO.             00370000
+003800 01 NULL-VAR.                                                     00380000
+003900      03 EARN-IND      PIC S9(04) COMP VALUE ZERO.                00390000
+004000      03 DEDN-IND      PIC S9(04) COMP VALUE ZERO.                00400000
+004100      03 NAME-IND      PIC S9(04) COMP VALUE ZERO.                00410000
+004200      03 DESG-IND      PIC S9(04) COMP VALUE ZERO.                00420001
+004300 01 WS-EARN            PIC ZZ,ZZ9.99 VALUE SPACES.                00430000
+004400 01 WS-DEDN            PIC ZZ,ZZ9.99 VALUE SPACES.                00440000
+004500 01 WS-SAL             PIC 9(06)V99 VALUE ZERO.                   00450000
+004600 01 WS-AMOUNT          PIC 9(04)    VALUE ZERO.                   00460002
+004700 01 WS-MIN             PIC 9(04)    VALUE ZERO.                   00470000
+004800 01 WS-SQLCODE         PIC -9(03)   VALUE ZERO.                   00480000
+004900 01  WS-REP-STAT       PIC X(02).                                 00490000
+005000     88  OPEN-SUCCESS               VALUE '00'.                   00500000
+005100 01 WS-ACCEPT.                                                    00510001
+005200     88 END-OF-DATA                 VALUE 'XXXXXXXXXXXXX'.        00520002
+005300     03 WS-LOC             PIC X(03)    VALUE SPACES.             00530001
+005400     03 WS-INC1            PIC 9(02)  VALUE ZERO.                 00540001
+005500     03 WS-INC2            PIC 9(02)  VALUE ZERO.                 00550001
+005600     03 WS-INC3            PIC 9(02)  VALUE ZERO.                 00560001
+005700     03 WS-INC4            PIC 9(02)  VALUE ZERO.                 00570001
+005800     03 WS-INC5            PIC 9(02)  VALUE ZERO.                 00580001
+005900 01 WS-TABLE-FLAG      PIC X(01)    VALUE 'N'.                    00590000
+006000     88 END-OF-ROWS                 VALUE 'Y'.                    00600000
+006100     EXEC SQL                                                     00610000
+006200      INCLUDE EMPGEN3                                             00620001
+006300     END-EXEC                                                     00630000
+006400     EXEC SQL                                                     00640000
+006500      INCLUDE LOCGEN3                                             00650001
+006600     END-EXEC                                                     00660000
+006700     EXEC SQL                                                     00670000
+006800      INCLUDE SQLCA                                               00680000
+006900     END-EXEC                                                     00690000
+007000     EXEC SQL                                                     00700000
+007100          DECLARE EMP3_CUR CURSOR FOR                             00710001
+007200          SELECT EMP_ID                                           00720000
+007300                ,EMP_NAME                                         00730000
+007400                ,EMP_DESG                                         00740001
+007500                ,EMP_EARN                                         00750000
+007600                ,EMP_DEDN                                         00760000
+007700          FROM T02_EMPLOYEE_TABLE3                                00770001
+007800          WHERE EMP_LOC = :WS-LOC                                 00780000
+007900          FOR UPDATE OF EMP_EARN, EMP_DEDN                        00790000
+008000     END-EXEC.                                                    00800000
+008100 PROCEDURE DIVISION.                                              00810000
+008200 MAIN-PARA.                                                       00820000
+008300     DISPLAY 'MAIN PARA'                                          00830000
+008400     PERFORM OPEN-PARA                                            00840000
+008500     ACCEPT WS-ACCEPT                                             00850001
+008600     PERFORM GET-LOCATION-PARA                                    00860000
+008700     PERFORM PROCESS-PARA UNTIL END-OF-DATA                       00870000
+008800     PERFORM CLOSE-PARA                                           00880000
+008900     STOP RUN.                                                    00890000
+009000 OPEN-PARA.                                                       00900000
+009100     DISPLAY 'OPEN PARA'                                          00910000
+009200     OPEN OUTPUT REPORT-FILE                                      00920000
+009300     DISPLAY WS-REP-STAT.                                         00930000
+009400 GET-LOCATION-PARA.                                               00940000
+009500     DISPLAY 'GET LOCATION PARA'                                  00950000
+009600     EXEC SQL                                                     00960000
+009700      SELECT LOC_NAME                                             00970000
+009800       INTO :LOC-NAME                                             00980000
+009900      FROM T02_LOCATION_TABLE3                                    00990001
+010000      WHERE LOC_ID = :WS-LOC                                      01000000
+010100     END-EXEC                                                     01010000
+010200     IF SQLCODE IS ZERO                                           01020000
+010300       MOVE LOC-NAME TO P-LOC-NAME                                01030000
+010400     ELSE                                                         01040000
+010500       MOVE SPACES TO P-LOC-NAME                                  01050000
+010600     END-IF                                                       01060000
+010700     WRITE REPORT-RECORD FROM LOCATION-NAME                       01070000
+010800     WRITE REPORT-RECORD FROM HEADING-LINE1.                      01080000
+010900 PROCESS-PARA.                                                    01090000
+011000     DISPLAY 'PROCESS PARA'                                       01100000
+011100     EXEC SQL                                                     01110003
+011200        OPEN EMP3_CUR                                             01120003
+011300     END-EXEC.                                                    01130003
+011400     MOVE SQLCODE TO WS-SQLCODE                                   01140003
+011500     DISPLAY 'CUROPN SQL =', WS-SQLCODE                           01150003
+011600     PERFORM FETCH-PARA UNTIL END-OF-ROWS                         01160000
+011700     MOVE 'N' TO WS-TABLE-FLAG                                    01170000
+011800     PERFORM GET-LOC-PARA.                                        01180000
+011900 GET-LOC-PARA.                                                    01190000
+012000     DISPLAY 'GET LOC'                                            01200000
+012100     ACCEPT WS-LOC                                                01210000
+012200     PERFORM GET-LOCATION-PARA.                                   01220000
+012300 FETCH-PARA.                                                      01230000
+012400     DISPLAY 'FETCH PARA'                                         01240000
+012500     EXEC SQL                                                     01250000
+012600        FETCH EMP3_CUR                                            01260001
+012700        INTO   :EMP-ID                                            01270000
+012800              ,:EMP-NAME:NAME-IND                                 01280000
+012900              ,:EMP-DESG:DESG-IND                                 01290001
+013000              ,:EMP-EARN:EARN-IND                                 01300000
+013100              ,:EMP-DEDN:DEDN-IND                                 01310000
+013200     END-EXEC.                                                    01320000
+013300     MOVE SQLCODE TO WS-SQLCODE                                   01330000
+013400     DISPLAY 'FETCH SQL =', WS-SQLCODE                            01340002
+013500     EVALUATE SQLCODE                                             01350000
+013600     WHEN 0                                                       01360000
+013700        PERFORM CHECK-PARA                                        01370000
+013800        PERFORM MOVE-PARA THRU PRINT-PARA                         01380000
+013900     WHEN 100                                                     01390000
+014000        DISPLAY ' NO MORE ROWS TO FETCH', WS-LOC                  01400000
+014100        MOVE 'Y' TO WS-TABLE-FLAG                                 01410000
+014200        ACCEPT WS-ACCEPT                                          01420004
+014300     EXEC SQL                                                     01430000
+014400        CLOSE EMP3_CUR                                            01440001
+014500     END-EXEC                                                     01450000
+014600*    STOP RUN                                                     01460000
+014700     WHEN -305                                                    01470000
+014800        DISPLAY ' NULL VALUES NOT HANDELED', WS-LOC               01480000
+014900     WHEN -504                                                    01490001
+015000        DISPLAY 'LOOPING'                                         01500001
+015100     STOP RUN                                                     01510001
+015200     WHEN OTHER                                                   01520000
+015300         DISPLAY 'ERROR READING EMPLOYEE TABLE'                   01530000
+015400     END-EVALUATE.                                                01540000
+015500 MOVE-PARA.                                                       01550000
+015600     DISPLAY 'MOVE PARA'                                          01560000
+015700     PERFORM CALC-PARA                                            01570001
+015800     PERFORM UPDATE-PARA                                          01580001
+015900     MOVE EMP-EARN TO WS-EARN                                     01590000
+016000     MOVE EMP-DEDN TO WS-DEDN                                     01600000
+016100     MOVE EMP-ID         TO P-ID.                                 01610000
+016200     MOVE EMP-NAME       TO P-NAME.                               01620001
+016300     MOVE EMP-DESG       TO P-DESG.                               01630001
+016400     MOVE WS-EARN        TO P-EARN.                               01640000
+016500     MOVE WS-DEDN        TO P-DEDN.                               01650000
+016600     COMPUTE WS-SAL = EMP-EARN - EMP-DEDN                         01660000
+016700     MOVE WS-SAL         TO P-SAL.                                01670000
+016800 PRINT-PARA.                                                      01680000
+016900     DISPLAY 'PRINT PARA'                                         01690000
+017000     WRITE REPORT-RECORD FROM DETAIL-LINE.                        01700000
+017100 CHECK-PARA.                                                      01710000
+017200     DISPLAY 'CHECK PARA'                                         01720000
+017300     IF NAME-IND < ZERO                                           01730000
+017400      MOVE SPACES TO EMP-NAME.                                    01740001
+017500     IF  DESG-IND < ZERO                                          01750001
+017600      MOVE ZERO   TO EMP-DESG.                                    01760001
+017700     IF EARN-IND < ZERO                                           01770000
+017800      MOVE ZERO TO EMP-EARN.                                      01780000
+017900     IF DEDN-IND < ZERO                                           01790000
+018000      MOVE ZERO TO EMP-DEDN.                                      01800000
+018100 CALC-PARA.                                                       01810001
+018200     DISPLAY 'CALCULATION PARA'                                   01820001
+018300     ADD 5000 TO WS-AMOUNT                                        01830002
+018400     DISPLAY WS-AMOUNT                                            01840002
+018500     ADD WS-AMOUNT TO EMP-EARN                                    01850001
+018600     EVALUATE EMP-DESG                                            01860001
+018700      WHEN 01                                                     01870001
+018800       COMPUTE WS-MIN = WS-AMOUNT / WS-INC1                       01880001
+018900       DISPLAY 'EMP DESG', EMP-DESG                               01890002
+019000      WHEN 02                                                     01900001
+019100       COMPUTE WS-MIN = WS-AMOUNT / WS-INC2                       01910001
+019200       DISPLAY 'EMP DESG', EMP-DESG                               01920002
+019300      WHEN 03                                                     01930001
+019400       COMPUTE WS-MIN = WS-AMOUNT / WS-INC3                       01940001
+019500       DISPLAY 'EMP DESG', EMP-DESG                               01950002
+019600      WHEN 04                                                     01960001
+019700       COMPUTE WS-MIN = WS-AMOUNT / WS-INC4                       01970001
+019800       DISPLAY 'EMP DESG', EMP-DESG                               01980002
+019900      WHEN OTHER                                                  01990002
+020000       DISPLAY 'DESIGNATION NOT AVAILABLE'                        02000002
+020100     END-EVALUATE                                                 02010001
+020200     DISPLAY WS-MIN                                               02020001
+020300     ADD WS-MIN TO EMP-DEDN.                                      02030001
+020400 UPDATE-PARA.                                                     02040001
+020500     DISPLAY 'UPDATE PARA'                                        02050002
+020600     EXEC SQL                                                     02060001
+020700     UPDATE T02_EMPLOYEE_TABLE3                                   02070001
+020800      SET EMP_EARN = :EMP-EARN                                    02080001
+020900     WHERE CURRENT OF EMP3_CUR                                    02090001
+021000     END-EXEC                                                     02100001
+021100     EXEC SQL                                                     02110001
+021200     UPDATE T02_EMPLOYEE_TABLE3                                   02120001
+021300      SET EMP_DEDN = :EMP-DEDN                                    02130001
+021400     WHERE CURRENT OF EMP3_CUR                                    02140001
+021500     END-EXEC.                                                    02150001
+021600 CLOSE-PARA.                                                      02160000
+021700     DISPLAY 'CLOSE PARA'                                         02170000
+021800     CLOSE REPORT-FILE.                                           02180000
